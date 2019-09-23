@@ -1,9 +1,11 @@
 import React from 'react'
+import colors from '../../../constants/Colors'
+import dimens from '../../../constants/Dimens'
 import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
     container: {
-        backgroundColor: '#455a64',
+        backgroundColor: colors.appColor,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -21,8 +23,8 @@ export default StyleSheet.create({
     },
     logoText: {
         marginVertical: 15,
-       fontSize: 18, 
-       color: 'white'
+       fontSize: dimens.textLogo, 
+       color: colors.colorTextWhite
     },
     signupTextCont: {
         flexGrow: 1,
@@ -32,35 +34,35 @@ export default StyleSheet.create({
         flexDirection: 'row'
     },
     signupText: {
-        color: 'rgba(255,255,255,0.7)',
-        fontSize: 16,
+        color: colors.loginSignupQuestionText,
+        fontSize: dimens.textSize,
     },
     signupButton: {
-        color: "#ffffff",
-        fontSize: 16,
+        color: colors.colorTextWhite,
+        fontSize: dimens.textSize,
         fontWeight: 'bold',
         marginLeft: 4,
     },
     inputBox: {
         width: 300,
-        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        backgroundColor: colors.loginInputBox,
         borderRadius: 25,
         paddingHorizontal: 16,
-        fontSize: 16,
-        color: 'white',
+        fontSize: dimens.textSize,
+        color: colors.colorTextWhite,
         marginVertical: 10
     },
     button: {
-        backgroundColor: '#1c313a',
+        backgroundColor: colors.loginButton,
         width: 300,
         borderRadius: 25,
         marginVertical: 10,
         paddingVertical: 13,
     },
     buttonText: {
-        fontSize: 16,
+        fontSize: dimens.textSize,
         fontWeight: 'bold',
-        color: '#ffffff',
+        color: colors.colorTextWhite,
         textAlign: 'center'
     },
 })

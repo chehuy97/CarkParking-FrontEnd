@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native'
+import styles from './Styles'
+import { Image, View } from 'react-native'
+import { Button } from 'native-base'
+import HistoryCard from '../../../components/history_card/HistoryCard'
 
-export default class componentName extends Component {
+export default class History extends Component {
+  // static navigationOptions = {
+  //   drawerLabel: 'History',
+  //   drawerIcon: ({ tintColor }) => (
+  //     <Image
+  //       source={require('../../../assets/images/history-icon.png')}
+  //       style={{ tintColor: tintColor }}
+  //     />
+  //   ),
+  //   headerMode: 'none',
+  //   header: null
+  // };
   render() {
     return (
-      <Text>
-          History
-      </Text>
+      <View>
+        <HistoryCard/>
+      </View>
     );
   }
 }

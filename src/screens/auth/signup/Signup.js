@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styles from './Styles'
+import strings from '../../../constants/Strings'
 import  { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 
 export default class Signup extends Component {
@@ -14,7 +15,7 @@ render() {
                 <Image
                 style={{width: 100 , height: 100}}
                 source={require('../../../assets/images/logo-app.png')}/>
-                <Text style = {styles.logoText}> Signup Account</Text>
+                <Text style = {styles.logoText}> {strings.signupName}</Text>
             </View>
             <View style = {styles.containerForm}>
                 <TextInput 
@@ -40,7 +41,7 @@ render() {
             </View>
             <View style = {styles.signupTextCont}>
                 <Text style ={ styles.signupText}>
-                    Already have account?
+                    {strings.signupAsk}
                 </Text>
                 <TouchableOpacity  onPress={() => this.props.navigation.navigate('Login')}>
                 <Text style = {styles.signupButton}>
