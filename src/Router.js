@@ -4,13 +4,15 @@ import { createAppContainer,createSwitchNavigator } from 'react-navigation'
 import Login from './screens/auth/login/Login';
 import Signup from './screens/auth/signup/Signup';
 import Home from './screens/main/home/Home'
-import DrawerNavigation from './DrawerNavigation'
+import DrawerUserNavigation from './DrawerUserNavigation'
+import DrawerOnwerNavigation from './DrawerOwnerNavigation'
 
 const RootStack = createSwitchNavigator(
     {
       Login: Login,
       Signup: Signup,
-      DrawerNavigation: DrawerNavigation,
+      DrawerUser: DrawerUserNavigation,
+      DrawerOnwer: DrawerOnwerNavigation,
       Home: Home,
     },
     {

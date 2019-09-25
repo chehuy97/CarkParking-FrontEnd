@@ -16,9 +16,13 @@ export default class Login extends Component {
     };
   }
   validate(){
-    if((this.state.name === 'huy') && (this.state.pass === '123')){
-        this.props.navigation.navigate('DrawerNavigation')
-    } else {
+    if((this.state.name === 'che') && (this.state.pass === '123')){
+        this.props.navigation.navigate('DrawerOnwer')
+    } 
+    else if((this.state.name === 'huy') && (this.state.pass === '123')){
+        this.props.navigation.navigate('DrawerUser')
+    } 
+    else {
         this.props.navigation.navigate('Login')
     }
     

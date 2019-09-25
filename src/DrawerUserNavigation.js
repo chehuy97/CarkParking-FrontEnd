@@ -6,19 +6,17 @@ import {createStackNavigator} from 'react-navigation-stack';
 import Home from './screens/main/home/Home'
 import History from './screens/main/history/History'
 import Payment from './screens/main/payment/Payment'
+import Account from './screens/main/account/Account'
 import colors from './constants/Colors'
  
 class NavigationDrawerStructure extends Component {
-  //Structure for the navigatin Drawer
   toggleDrawer = () => {
-    //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
   };
   render() {
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-          {/*Donute Button Image */}
           <Image
             source={require('./assets/images/drawer.png')}
             style={{ width: 25, height: 25, marginLeft: 5 }}
@@ -29,9 +27,8 @@ class NavigationDrawerStructure extends Component {
   }
 }
  
-const FirstActivity_StackNavigator = createStackNavigator({
-  //All the screen from the Screen1 will be indexed here
-  First: {
+const Home_StackNavigator = createStackNavigator({
+  Home: {
     screen: Home,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
@@ -49,9 +46,8 @@ const FirstActivity_StackNavigator = createStackNavigator({
   },
 });
  
-const Screen2_StackNavigator = createStackNavigator({
-  //All the screen from the Screen2 will be indexed here
-  Second: {
+const History_StackNavigator = createStackNavigator({
+  History: {
     screen: History,
     navigationOptions: ({ navigation }) => ({
       title: 'History',
@@ -64,9 +60,8 @@ const Screen2_StackNavigator = createStackNavigator({
   },
 });
  
-const Screen3_StackNavigator = createStackNavigator({
-  //All the screen from the Screen3 will be indexed here
-  Third: {
+const Payment_StackNavigator = createStackNavigator({
+  Payment: {
     screen: Payment,
     navigationOptions: ({ navigation }) => ({
       title: 'Payment',
@@ -78,35 +73,44 @@ const Screen3_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
-const DrawerNavigation = createDrawerNavigator({
-  History: {
-    //Title
-    screen: Screen2_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'History',
-    },
+
+const Account_StackNavigator = createStackNavigator({
+  Account: {
+    screen: Account,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Account',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: colors.appColor,
+      },
+      headerTintColor: colors.colorTextWhite,
+    }),
   },
-  //Drawer Optons and indexing
+});
+ 
+const DrawerUserNavigation = createDrawerNavigator({
   Home: {
-    //Title
-    screen: FirstActivity_StackNavigator,
+    screen: Home_StackNavigator,
     navigationOptions: {
       drawerLabel: 'Home',
     },
   },
-  // History: {
-  //   //Title
-  //   screen: Screen2_StackNavigator,
-  //   navigationOptions: {
-  //     drawerLabel: 'History',
-  //   },
-  // },
+  History: {
+    screen: History_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'History',
+    },
+  }, 
   Payment: {
-    //Title
-    screen: Screen3_StackNavigator,
+    screen: Payment_StackNavigator,
     navigationOptions: {
       drawerLabel: 'Payment',
+    },
+  },
+  Account: {
+    screen: Account_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Account',
     },
   },
 });
@@ -118,5 +122,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default createAppContainer(DrawerNavigation);
+export default createAppContainer(DrawerUserNavigation);
   

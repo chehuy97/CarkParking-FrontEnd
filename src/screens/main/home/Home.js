@@ -17,7 +17,7 @@ export default class Home extends Component {
     return (
       <View>
           <Text>
-              Home
+              This is Home.
           </Text>
       </View>
     )

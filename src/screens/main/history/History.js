@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Styles'
-import { Image, View } from 'react-native'
-import { Button } from 'native-base'
+import { Image, ScrollView } from 'react-native'
 import HistoryCard from '../../../components/history_card/HistoryCard'
 
 export default class History extends Component {
@@ -18,9 +17,15 @@ export default class History extends Component {
   // };
   render() {
     return (
-      <View>
-        <HistoryCard/>
-      </View>
+      <ScrollView style={styles.container}>
+        <HistoryCard name='Harry Kane'/>
+        <HistoryCard name='James Harden'/>
+        <HistoryCard name='Roger Federer'/>
+        <HistoryCard name='Heung Min Son'/>
+        <HistoryCard name='Novak Djokovic'/>
+        <HistoryCard name='Erik Lamela'/>
+        <HistoryCard name='Russell Westrook'/>
+      </ScrollView>
     );
   }
 }
