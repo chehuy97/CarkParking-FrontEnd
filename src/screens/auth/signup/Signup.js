@@ -13,7 +13,7 @@ render() {
         <View style = {styles.container}>
             <View style = {styles.containerLogo}>
                 <Image
-                style={{width: 100 , height: 100}}
+                style={{width: 120 , height: 120}}
                 source={require('../../../assets/images/logo-app.png')}/>
                 <Text style = {styles.logoText}> {strings.signupName}</Text>
             </View>

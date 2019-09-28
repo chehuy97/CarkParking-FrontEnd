@@ -6,6 +6,7 @@ export default StyleSheet.create({
         flex: 1,
         borderWidth: 2,
         borderColor: colors.colorPage,
+        borderRadius: 6,
     },
     textName: {
         flex: 2,

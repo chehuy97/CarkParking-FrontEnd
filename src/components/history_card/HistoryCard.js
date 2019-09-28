@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './styles'
 import { CardItem, Text, Right, Left, View } from 'native-base';
 import { Image, Button } from 'react-native-elements'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 export default class HistoryCard extends Component {
   render() {
     return (

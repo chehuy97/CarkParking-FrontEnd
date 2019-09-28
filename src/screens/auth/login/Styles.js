@@ -1,7 +1,7 @@
 import React from 'react'
 import colors from '../../../constants/Colors'
 import dimens from '../../../constants/Dimens'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
 export default StyleSheet.create({
     container: {
@@ -22,9 +22,10 @@ export default StyleSheet.create({
 
     },
     logoText: {
-        marginVertical: 15,
+       marginVertical: 15,
        fontSize: dimens.textLogo, 
-       color: colors.colorTextWhite
+       color: colors.colorTextWhite,
+       fontWeight: 'bold',
     },
     signupTextCont: {
         flexGrow: 1,
@@ -44,7 +45,7 @@ export default StyleSheet.create({
         marginLeft: 4,
     },
     inputBox: {
-        width: 300,
+        width: Dimensions.get('window').width-50,
         backgroundColor: colors.loginInputBox,
         borderRadius: 25,
         paddingHorizontal: 16,
@@ -54,7 +55,7 @@ export default StyleSheet.create({
     },
     button: {
         backgroundColor: colors.loginButton,
-        width: 300,
+        width: Dimensions.get('window').width-50,
         borderRadius: 25,
         marginVertical: 10,
         paddingVertical: 13,

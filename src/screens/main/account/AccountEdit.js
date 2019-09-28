@@ -5,7 +5,7 @@ import { View } from 'react-native'
 import { Image,Text } from 'react-native-elements'
 import Button from '../../../components/button_app/ButtonApp'
 
-export default class Account extends Component {
+export default class AccountEdit extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -16,15 +16,15 @@ export default class Account extends Component {
             <Text style={styles.text}>Chehuy97</Text>
           </View>
           <View style={styles.viewInfo}>
-            <AccountCard name="Name " value="Harry Kane" />
-            <AccountCard name="Sex " value="Male" />
-            <AccountCard name="Age " value="25" />
-            <AccountCard name="Address " value="17 Bil Nilchoson" />
-            <AccountCard name="Car" value="7K23-8BC3E" />
-            <AccountCard name="Balance" value="1,764,264 VND"/>
+            <AccountCard name="Name "/>
+            <AccountCard name="Sex "/>
+            <AccountCard name="Age "/>
+            <AccountCard name="Address "/>
+            <AccountCard name="Car"/>
+            <AccountCard name="Balance"/>
           </View>
           <View style={styles.viewButtonEdit}>
-              <Button btnname = 'Edit' onPress = {()=>{this.props.navigation.navigate('AccountEdit')}}/>
+              <Button btnname = 'Confirm'/>
           </View>
       </View>
     );
