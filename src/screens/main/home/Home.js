@@ -1,40 +1,70 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import {  StyleSheet, Button } from 'react-native'
 import MapView from 'react-native-maps';
 import styles from './Styles'
 import { Marker } from 'react-native-maps'
+import imageGreen from '../../../assets/images/parkingGreenSign.png';
+import imageRed from '../../../assets/images/parkingRedSign.png';
 
 
 export default class Home extends Component {  
-  // constructor(props){
-  //   super(props)
-  //   this.state = {
-  //       region: {
-  //         latitude: 37.78825,
-  //         longitude: -122.4324,
-  //         latitudeDelta: 0.0922,
-  //         longitudeDelta: 0.0421,
-  //       },
-  //     }
-  //   }
-  // onRegionChange(region) {
-  //   this.setState({ region });
-  // }
-
   render() {
+
+    const coordinates = [];
+
+    coordinates.push({
+      key: 0,
+      location: {
+        longitude: 108.206230,
+        latitude: 16.047079
+      }
+    });
+
+    for(let i = 1; i<50; i++) {
+
+      const location = {
+        longitude: coordinates[i-1].location.longitude + (Math.random() * (i%2 === 0 ? -0.05 : 0.05)),
+        latitude: coordinates[i-1].location.latitude + (Math.random() * (i%2 === 0 ? -0.05 : 0.05)),
+      };
+
+      coordinates.push({ key: i, location });
+
+    }
+
     return (
-    <View style={styles.container}>
-     <MapView
-       style={styles.map}
-       region={{
-         latitude: 16.06778,
-         longitude: 108.22083,
-         latitudeDelta: 0.1,
-         longitudeDelta: 0.1,
-       }}
-     >
-     </MapView>
-      </View>
+      <MapView
+        renderMarker={renderMarker}
+        initialRegion={{
+          longitude: 108.206230,
+          latitude: 16.047079,
+          latitudeDelta: 0.09,
+          longitudeDelta: 0.05,
+        }}
+        style={StyleSheet.absoluteFillObject}>
+
+        { coordinates.map(({ key, location } ) => <Marker key={key} image={setImage(key)} coordinate={location} />) }
+
+      </MapView>
     );
   }
+}
+function setImage(key){
+  if(key%3!==0){
+    return imageGreen
+  } else{
+    return imageRed
+  }
+}
+function renderMarker({ location }) {
+  return (
+    <Marker
+      image={imageRed}
+      coordinate={location}
+    >
+      <Button
+            title="Left button"
+            onPress={() => Alert.alert('Left button pressed')}
+          />
+    </Marker>
+  );
 }
