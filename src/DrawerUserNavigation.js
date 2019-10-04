@@ -1,55 +1,68 @@
-import React, { Component } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
-import Home from './screens/main/home/Home'
-import History from './screens/main/history/History'
-import Payment from './screens/main/payment/Payment'
-import Account from './screens/main/account/Account'
-import colors from './constants/Colors'
- 
+import Home from './screens/main/home/Home';
+import Search from './screens/main/search/Search';
+//import Home_StackNavigator from './screens/main/home/Home_Navigator'
+import History from './screens/main/history/History';
+import Payment from './screens/main/payment/Payment';
+import Account from './screens/main/account/Account';
+import colors from './constants/Colors';
+
 class NavigationDrawerStructure extends Component {
   toggleDrawer = () => {
     this.props.navigationProps.toggleDrawer();
   };
   render() {
     return (
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
           <Image
             source={require('./assets/images/drawer.png')}
-            style={{ width: 25, height: 25, marginLeft: 5 }}
+            style={{width: 25, height: 25, marginLeft: 5}}
           />
         </TouchableOpacity>
       </View>
     );
   }
 }
- 
-const Home_StackNavigator = createStackNavigator({
-  Home: {
-    screen: Home,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Home',
-      // drawerIcon: ({ tintColor }) => (
-      //   <Image
-      //   source={require('./assets/images/homeIcon.png')}
-      //   style={[styles.icon, { tintColor: tintColor }]}
-      //   />),
-      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: colors.appColor,
-      },
-      headerTintColor: colors.colorTextWhite,
-    }),
+
+const Home_StackNavigator = createStackNavigator(
+  {
+    Home: {
+      screen: Home,
+      navigationOptions: ({navigation}) => ({
+        title: 'Home',
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerStyle: {
+          backgroundColor: colors.appColor,
+        },
+        headerTintColor: colors.colorTextWhite,
+      }),
+    },
+    Search: {
+      screen: Search,
+      navigationOptions: ({navigation}) => ({
+        title: 'Search',
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerStyle: {
+          backgroundColor: colors.appColor,
+        },
+        headerTintColor: colors.colorTextWhite,
+      }),
+    },
   },
-});
- 
+  {
+    initialRouteName: 'Home',
+  },
+);
+
 const History_StackNavigator = createStackNavigator({
   History: {
     screen: History,
-    navigationOptions: ({ navigation }) => ({
+    navigationOptions: ({navigation}) => ({
       title: 'History',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
@@ -59,11 +72,11 @@ const History_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
+
 const Payment_StackNavigator = createStackNavigator({
   Payment: {
     screen: Payment,
-    navigationOptions: ({ navigation }) => ({
+    navigationOptions: ({navigation}) => ({
       title: 'Payment',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
@@ -77,7 +90,7 @@ const Payment_StackNavigator = createStackNavigator({
 const Account_StackNavigator = createStackNavigator({
   Account: {
     screen: Account,
-    navigationOptions: ({ navigation }) => ({
+    navigationOptions: ({navigation}) => ({
       title: 'Account',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
@@ -87,7 +100,7 @@ const Account_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
+
 const DrawerUserNavigation = createDrawerNavigator({
   Home: {
     screen: Home_StackNavigator,
@@ -100,12 +113,6 @@ const DrawerUserNavigation = createDrawerNavigator({
     navigationOptions: {
       drawerLabel: 'History',
     },
-  }, 
-  Payment: {
-    screen: Payment_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Payment',
-    },
   },
   Account: {
     screen: Account_StackNavigator,
@@ -113,8 +120,12 @@ const DrawerUserNavigation = createDrawerNavigator({
       drawerLabel: 'Account',
     },
   },
+  Payment: {
+    screen: Payment_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Payment',
+    },
+  },
 });
- 
 
 export default createAppContainer(DrawerUserNavigation);
-  

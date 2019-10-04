@@ -1,22 +1,25 @@
-import { StyleSheet } from 'react-native'
+import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-    container: {
-        flex: 1,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        justifyContent: 'flex-end',
-        alignContent: 'center',
-    },
-      map: {
-        flex: 1,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-      },
-})
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  map: {
+    flex: 1,
+  },
+  buttonShowGPS: {
+    position: 'absolute',
+    bottom: 160,
+    right: 40,
+  },
+  buttonGo: {
+    position: 'absolute',
+    bottom: 100,
+    right: 40,
+  },
+  buttonImage: {
+    width: 42,
+    height: 42,
+  },
+});

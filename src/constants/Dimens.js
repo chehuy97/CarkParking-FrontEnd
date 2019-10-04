@@ -1,8 +1,13 @@
-import { Dimensions } from 'react-native'
+import {Dimensions} from 'react-native';
 export default {
-    textBigSize: 30,
-    textSize: 16,
-    textLogo: 21,
-    DEVICE_WIDTH: Dimensions.get('window').width,
-    DEVICE_HEIGHT: Dimensions.get('window').height
-}
+  textBigSize: 30,
+  textMediumSize: 24,
+  textSize: 16,
+  textLogo: 21,
+
+  DEVICE_WIDTH: Dimensions.get('window').width,
+  DEVICE_HEIGHT: Dimensions.get('window').height,
+
+  delta: 0.01,
+  largeDelta: 0.02,
+};

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {View, StyleSheet} from 'react-native';
 import Router from './src/Router';
 import DrawerUserNavigation from './src/DrawerUserNavigation';
 import DrawerOnwerNavigation from './src/DrawerOwnerNavigation';
@@ -10,8 +10,8 @@ console.disableYellowBox = true;
 export default class App extends Component {
   render() {
     return (
-      <View style = {styles.container}>
-          <DrawerUserNavigation/>
+      <View style={styles.container}>
+        <DrawerUserNavigation />
       </View>
     );
   }
@@ -20,5 +20,5 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
-})
+  },
+});
