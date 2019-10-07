@@ -77,7 +77,7 @@ export default class Home extends Component {
     return (
       <View style={styles.container}>
         <MapView
-          onRegionChangeComplete={() => this.changeRegion(resultSearch)}
+          //onRegionChangeComplete={() => this.changeRegion(resultSearch)}
           zoomEnabled={true}
           region={this.state.region}
           style={StyleSheet.absoluteFillObject}>
