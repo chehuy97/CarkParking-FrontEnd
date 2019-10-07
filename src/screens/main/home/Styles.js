@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import dimens from '../../../constants/Dimens';
 
 export default StyleSheet.create({
   container: {
@@ -10,16 +11,16 @@ export default StyleSheet.create({
   },
   buttonShowGPS: {
     position: 'absolute',
-    bottom: 160,
-    right: 40,
+    bottom: dimens.home_buttonShowGPS_bottom,
+    right: dimens.home_button_right,
   },
   buttonGo: {
     position: 'absolute',
-    bottom: 100,
-    right: 40,
+    bottom: dimens.home_buttonGo_bottom,
+    right: dimens.home_button_right,
   },
   buttonImage: {
-    width: 42,
-    height: 42,
+    width: dimens.home_buttonsize,
+    height: dimens.home_buttonsize,
   },
 });

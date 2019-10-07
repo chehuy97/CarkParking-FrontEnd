@@ -1,13 +1,14 @@
 import {StyleSheet} from 'react-native';
+import dimens from '../../../constants/Dimens';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
   },
   inputText: {
-    marginHorizontal: 20,
+    marginHorizontal: dimens.search_input_marginHorizontal,
   },
   leftIcon: {
-    marginRight: 10,
+    marginRight: dimens.search_leftIcon_marginRight,
   },
 });

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import styles from './Styles';
 import strings from '../../../constants/Strings';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {View, Text, TouchableOpacity, TextInput, Image} from 'react-native';
+import colors from '../../../constants/Colors'
 
 export default class Login extends Component {
   static navigationOptions = {
@@ -37,16 +39,16 @@ export default class Login extends Component {
         <View style={styles.containerForm}>
           <TextInput
             style={styles.inputBox}
-            underlineColorAndroid="rgba(0,0,0,0)"
+            underlineColorAndroid={colors.loginUnderlineColor}
             placeholder="Username"
-            placeholderTextColor="#ffffff"
+            placeholderTextColor= {colors.colorWhite}
             onChangeText={value => this.setState({name: value})}
           />
           <TextInput
             style={styles.inputBox}
-            underlineColorAndroid="rgba(0,0,0,0)"
+            underlineColorAndroid={colors.loginUnderlineColor}
             placeholder="Password"
-            placeholderTextColor="#ffffff"
+            placeholderTextColor={colors.colorWhite}
             secureTextEntry={true}
             onChangeText={value => this.setState({pass: value})}
           />

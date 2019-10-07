@@ -3,16 +3,16 @@ import colors from '../../constants/Colors'
 import dimens from '../../constants/Dimens'
 export default StyleSheet.create({
     container: {
-        height: 160,
-        margin: 15,
-        marginTop: 10,
+        height: dimens.paymentCard_height,
+        margin: dimens.paymentCard_margin,
+        marginTop: dimens.paymentCard_marginTop,
         backgroundColor: colors.colorWhite,
-        borderRadius: 10,
+        borderRadius: dimens.paymentCard_radius,
     },
     viewContent: {
         flex: 3.5,
-        paddingLeft: 20,
-        paddingTop: 10,
+        paddingLeft: dimens.paymentCard_content_paddingLeft,
+        paddingTop: dimens.paymentCard_content_paddingTop,
     },
     viewButton: {
         flex: 1.3,
@@ -22,7 +22,7 @@ export default StyleSheet.create({
     },
     textTopic:{
         fontSize: dimens.textMediumSize,
-        paddingBottom: 5,
+        paddingBottom: dimens.paymentCard_topic_paddingBottom,
         fontWeight: 'bold',
         borderBottomColor: 'black'
     },
@@ -33,7 +33,7 @@ export default StyleSheet.create({
     textButton: {
         color: colors.colorWhite,
         fontSize: dimens.textSize,
-        marginLeft: 20,
+        marginLeft: dimens.payment_button_marginLeft,
         fontWeight: 'bold',
     }
 

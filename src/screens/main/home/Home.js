@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 import {
   TouchableOpacity,
   View,
-  Text,
   Alert,
   Image,
   StyleSheet,
-  RefreshControl,
 } from 'react-native';
 import dimens from '../../../constants/Dimens';
 import MapView from 'react-native-maps';
@@ -88,9 +86,9 @@ export default class Home extends Component {
             description={this.state.point.address}
             image={imageGreen}></Marker>
         </MapView>
-        <Text style={{position: 'absolute', top: 100, left: 50}}>
+        {/* <Text style={{position: 'absolute', top: 100, left: 50}}>
           {this.state.resultSearch}
-        </Text>
+        </Text>` */}
         <TouchableOpacity style={styles.buttonShowGPS}>
           <Image
             style={styles.buttonImage}
