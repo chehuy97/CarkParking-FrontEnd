@@ -1,27 +1,26 @@
 import React, {Component} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import {TouchableOpacity, View, Alert, Image, Text} from 'react-native';
+import {Button} from 'react-native-elements';
 import dimens from '../../../constants/Dimens';
 import MapView from 'react-native-maps';
-import {Marker, Callout} from 'react-native-maps';
+import {Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import styles from './Styles';
 import imageGreen from '../../../assets/images/parkingGreenSign.png';
 import imageRed from '../../../assets/images/parkingRedSign.png';
+import {CardItem} from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Colors from '../../../constants/Colors';
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
+    // (abc = this.props.navigation.getParam('value', 'default')),
     this.state = {
       latitude: 16.06887,
       longitude: 108.216629,
       error: null,
+      //resultSearch: abc,
       region: {
         longitude: 108.216629,
         latitude: 16.06887,
@@ -37,15 +36,16 @@ export default class Home extends Component {
         name: 'Arthur',
         address: 'Abc',
       },
-      status: true,
+      status: false,
     };
-    this.refreshScreen = this.refreshScreen.bind(this);
   }
   componentDidMount() {
+    //abc = this.props.navigation.getParam('value', 'Nothing');
     Geolocation.getCurrentPosition(position => {
       this.setState({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
+        //resultSearch: abc,
       });
     }),
       error => Alert.alert(error, error),
@@ -63,19 +63,16 @@ export default class Home extends Component {
       });
     } else {
       this.setState({status: false});
+      this.setState({
+        region: {
+          longitude: this.state.longitude,
+          latitude: this.state.latitude,
+          longitudeDelta: dimens.delta,
+          latitudeDelta: dimens.delta,
+        },
+      });
     }
-    return this.state.region;
   };
-  refreshScreen() {
-    this.setState({
-      region: {
-        longitude: this.state.longitude,
-        latitude: this.state.latitude,
-        longitudeDelta: dimens.delta,
-        latitudeDelta: dimens.delta,
-      },
-    });
-  }
   ShowHideTextComponentView = () => {
     if (this.state.status == true) {
       this.setState({status: false});
@@ -94,16 +91,15 @@ export default class Home extends Component {
       },
     });
   };
-  // showDetailParkingLot = () => {
-  //   <View style={styles.parkingDetail}></View>;
-  //   alert('hihi');
-  // };
   render() {
     const resultSearch = this.props.navigation.getParam('value', 'Default');
+    {
+      this.searchPlace(resultSearch);
+    }
     return (
       <View style={styles.container}>
         <MapView
-          onPress={() => this.searchPlace(resultSearch)}
+          //onPress={() => this.searchPlace(resultSearch)}
           zoomEnabled={true}
           region={this.state.region}
           style={styles.map}>
@@ -115,17 +111,48 @@ export default class Home extends Component {
             onPress={() => this.ShowHideTextComponentView()}
             image={imageGreen}></Marker>
         </MapView>
+        <Text style={{position: 'absolute', top: 30, left: 20}}>
+          {resultSearch}
+        </Text>
         {this.state.status ? (
           <View>
             <View style={styles.parkingDetail}>
               <Text style={styles.detailName}>Arthur</Text>
-              <Text>Abc</Text>
+              <CardItem style={styles.detailAddressCard}>
+                <Text style={styles.detailAddress}>112/59 Tran Cao Van</Text>
+                <Icon
+                  name="car"
+                  size={15}
+                  color={Colors.loginButton}
+                  style={styles.detailTimeIcon}
+                />
+                <Text style={styles.detailTime}>24min</Text>
+              </CardItem>
+              <CardItem>
+                <Button
+                  title="Direct"
+                  buttonStyle={styles.detailButton}
+                  onPress={() => {
+                    this.props.navigation.navigate('Search');
+                  }}
+                />
+                <Button title="Booking" buttonStyle={styles.detailButton} />
+              </CardItem>
             </View>
             <TouchableOpacity style={styles.buttonShowGPSCard}>
               <Image
                 style={styles.buttonImage}
                 source={require('../../../assets/images/target.png')}
-                onPress={() => {}}
+                onPress={() => {
+                  this.setState({
+                    region: {
+                      longitude: this.state.longitude,
+                      latitude: this.state.latitude,
+                      longitudeDelta: dimens.delta,
+                      latitudeDelta: dimens.delta,
+                    },
+                  });
+                }}
               />
             </TouchableOpacity>
             <TouchableOpacity

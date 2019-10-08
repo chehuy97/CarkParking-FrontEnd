@@ -2,6 +2,8 @@ export default {
   appColor: '#455a64',
   colorPage: '#e6e6ea',
   colorWhite: 'white',
+  colorBlack: 'black',
+  colorGray: 'gray',
 
   colorTextWhite: 'white',
 
