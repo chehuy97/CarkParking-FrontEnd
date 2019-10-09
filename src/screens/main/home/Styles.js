@@ -35,7 +35,7 @@ export default StyleSheet.create({
     width: dimens.home_buttonsize,
     height: dimens.home_buttonsize,
   },
-  parkingDetail: {
+  detailView: {
     position: 'absolute',
     height: dimens.home_parkingDetail_height,
     bottom: dimens.home_parkingDetail_dimenstion,
@@ -57,16 +57,31 @@ export default StyleSheet.create({
     color: colors.colorGray,
   },
   detailTimeIcon: {
-    marginLeft: 20,
+    marginLeft: dimens.home_detailTimeIcon_marginLeft,
   },
   detailTime: {
-    marginLeft: 5,
+    marginLeft: dimens.home_detailTime_marginLeft,
   },
   detailButton: {
-    marginRight: 20,
-    marginLeft: 5,
+    marginRight: dimens.home_detailButton_marginRight,
+    marginLeft: dimens.home_detailButton_marginLeft,
     width: (dimens.DEVICE_WIDTH - 80) / 2,
     backgroundColor: colors.loginButton,
+    borderRadius: dimens.home_detailButton_radius,
+  },
+  searchView: {
+    position: 'absolute',
+    height: 80,
+    backgroundColor: 'rgba(255, 255, 255, 0)',
+    width: dimens.DEVICE_WIDTH,
+    top: 0,
+  },
+  searchInput: {
+    backgroundColor: 'white',
     borderRadius: 10,
+    width: dimens.DEVICE_WIDTH - 60,
+    marginLeft: 30,
+    height: 50,
+    marginTop: 15,
   },
 });

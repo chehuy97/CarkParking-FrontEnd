@@ -44,6 +44,7 @@ export default {
   home_buttonGo_bottom: 90,
   home_buttonShowGPSCard_bottom: 250,
   home_buttonGoCard_bottom: 190,
+
   home_button_right: 40,
   home_buttonsize: 42,
   home_parkingDetail_height: 130,
@@ -56,4 +57,5 @@ export default {
   home_detailTime_marginLeft: 5,
   home_detailButton_marginRight: 20,
   home_detailButton_marginLeft: 5,
+  home_detailButton_radius: 10,
 };

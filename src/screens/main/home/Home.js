@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Alert, Image, Text} from 'react-native';
+import {Input} from 'react-native-elements';
 import {Button} from 'react-native-elements';
 import dimens from '../../../constants/Dimens';
 import MapView from 'react-native-maps';
@@ -15,7 +16,6 @@ import Colors from '../../../constants/Colors';
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    // (abc = this.props.navigation.getParam('value', 'default')),
     this.state = {
       latitude: 16.06887,
       longitude: 108.216629,
@@ -40,12 +40,10 @@ export default class Home extends Component {
     };
   }
   componentDidMount() {
-    //abc = this.props.navigation.getParam('value', 'Nothing');
     Geolocation.getCurrentPosition(position => {
       this.setState({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-        //resultSearch: abc,
       });
     }),
       error => Alert.alert(error, error),
@@ -65,8 +63,8 @@ export default class Home extends Component {
       this.setState({status: false});
       this.setState({
         region: {
-          longitude: this.state.longitude,
-          latitude: this.state.latitude,
+          longitude: 108.216629,
+          latitude: 16.074037,
           longitudeDelta: dimens.delta,
           latitudeDelta: dimens.delta,
         },
@@ -93,13 +91,10 @@ export default class Home extends Component {
   };
   render() {
     const resultSearch = this.props.navigation.getParam('value', 'Default');
-    {
-      this.searchPlace(resultSearch);
-    }
     return (
       <View style={styles.container}>
         <MapView
-          //onPress={() => this.searchPlace(resultSearch)}
+          onPress={() => this.searchPlace(resultSearch)}
           zoomEnabled={true}
           region={this.state.region}
           style={styles.map}>
@@ -111,12 +106,31 @@ export default class Home extends Component {
             onPress={() => this.ShowHideTextComponentView()}
             image={imageGreen}></Marker>
         </MapView>
-        <Text style={{position: 'absolute', top: 30, left: 20}}>
-          {resultSearch}
-        </Text>
+        <View style={styles.searchView}>
+          <Input
+            placeholder="search location"
+            containerStyle={styles.searchInput}
+            leftIcon={
+              <Icon
+                name="bars"
+                size={17}
+                color={Colors.appColor}
+                style={{marginRight: 10}}
+              />
+            }
+            rightIcon={
+              <Icon
+                name="search"
+                size={17}
+                color={Colors.appColor}
+                style={{marginRight: 15}}
+              />
+            }
+          />
+        </View>
         {this.state.status ? (
           <View>
-            <View style={styles.parkingDetail}>
+            <View style={styles.detailView}>
               <Text style={styles.detailName}>Arthur</Text>
               <CardItem style={styles.detailAddressCard}>
                 <Text style={styles.detailAddress}>112/59 Tran Cao Van</Text>
@@ -139,20 +153,21 @@ export default class Home extends Component {
                 <Button title="Booking" buttonStyle={styles.detailButton} />
               </CardItem>
             </View>
-            <TouchableOpacity style={styles.buttonShowGPSCard}>
+            <TouchableOpacity
+              style={styles.buttonShowGPSCard}
+              onPress={() => {
+                this.setState({
+                  region: {
+                    longitude: this.state.longitude,
+                    latitude: this.state.latitude,
+                    longitudeDelta: dimens.delta,
+                    latitudeDelta: dimens.delta,
+                  },
+                });
+              }}>
               <Image
                 style={styles.buttonImage}
                 source={require('../../../assets/images/target.png')}
-                onPress={() => {
-                  this.setState({
-                    region: {
-                      longitude: this.state.longitude,
-                      latitude: this.state.latitude,
-                      longitudeDelta: dimens.delta,
-                      latitudeDelta: dimens.delta,
-                    },
-                  });
-                }}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -168,11 +183,21 @@ export default class Home extends Component {
           </View>
         ) : (
           <View>
-            <TouchableOpacity style={styles.buttonShowGPS}>
+            <TouchableOpacity
+              style={styles.buttonShowGPS}
+              onPress={() => {
+                this.setState({
+                  region: {
+                    longitude: this.state.longitude,
+                    latitude: this.state.latitude,
+                    longitudeDelta: dimens.delta,
+                    latitudeDelta: dimens.delta,
+                  },
+                });
+              }}>
               <Image
                 style={styles.buttonImage}
                 source={require('../../../assets/images/target.png')}
-                onPress={() => {}}
               />
             </TouchableOpacity>
             <TouchableOpacity
