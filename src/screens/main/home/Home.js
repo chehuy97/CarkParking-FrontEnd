@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Alert, Image, Text} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Alert,
+  Image,
+  Text,
+  ScrollView,
+} from 'react-native';
 import {Input} from 'react-native-elements';
 import {Button} from 'react-native-elements';
 import dimens from '../../../constants/Dimens';
@@ -12,6 +19,7 @@ import imageRed from '../../../assets/images/parkingRedSign.png';
 import {CardItem} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../../constants/Colors';
+import HistoryCard from '../../../components/history_cards/HistoryCard';
 
 export default class Home extends Component {
   constructor(props) {
@@ -20,12 +28,12 @@ export default class Home extends Component {
       latitude: 16.06887,
       longitude: 108.216629,
       error: null,
-      //resultSearch: abc,
+      resultSearch: 'default',
       region: {
         longitude: 108.216629,
         latitude: 16.06887,
-        longitudeDelta: dimens.delta,
-        latitudeDelta: dimens.delta,
+        longitudeDelta: 0.03,
+        latitudeDelta: 0.03,
       },
       point: {
         key: 0,
@@ -37,6 +45,7 @@ export default class Home extends Component {
         address: 'Abc',
       },
       status: false,
+      searchStatus: false,
     };
   }
   componentDidMount() {
@@ -49,26 +58,14 @@ export default class Home extends Component {
       error => Alert.alert(error, error),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000};
   }
-  searchPlace = resultSearch => {
-    if (resultSearch === this.state.point.address) {
-      this.setState({
-        region: {
-          longitude: this.state.point.coordinate.longitude,
-          latitude: this.state.point.coordinate.latitude,
-          longitudeDelta: dimens.delta,
-          latitudeDelta: dimens.delta,
-        },
-      });
+  changeStatus = () => {
+    this.setState({status: false});
+  };
+  showSearchHistory = () => {
+    if (this.state.searchStatus == true) {
+      this.setState({searchStatus: false});
     } else {
-      this.setState({status: false});
-      this.setState({
-        region: {
-          longitude: 108.216629,
-          latitude: 16.074037,
-          longitudeDelta: dimens.delta,
-          latitudeDelta: dimens.delta,
-        },
-      });
+      this.setState({searchStatus: true});
     }
   };
   ShowHideTextComponentView = () => {
@@ -90,11 +87,10 @@ export default class Home extends Component {
     });
   };
   render() {
-    const resultSearch = this.props.navigation.getParam('value', 'Default');
     return (
       <View style={styles.container}>
         <MapView
-          onPress={() => this.searchPlace(resultSearch)}
+          onPress={() => this.changeStatus()}
           zoomEnabled={true}
           region={this.state.region}
           style={styles.map}>
@@ -106,28 +102,6 @@ export default class Home extends Component {
             onPress={() => this.ShowHideTextComponentView()}
             image={imageGreen}></Marker>
         </MapView>
-        <View style={styles.searchView}>
-          <Input
-            placeholder="search location"
-            containerStyle={styles.searchInput}
-            leftIcon={
-              <Icon
-                name="bars"
-                size={17}
-                color={Colors.appColor}
-                style={{marginRight: 10}}
-              />
-            }
-            rightIcon={
-              <Icon
-                name="search"
-                size={17}
-                color={Colors.appColor}
-                style={{marginRight: 15}}
-              />
-            }
-          />
-        </View>
         {this.state.status ? (
           <View>
             <View style={styles.detailView}>
@@ -212,6 +186,147 @@ export default class Home extends Component {
             </TouchableOpacity>
           </View>
         )}
+        {this.state.searchStatus ? (
+          <View style={styles.searchView}>
+            <View style={styles.viewHistory}>
+              <Text style={styles.historyLasttimeText}>Last time</Text>
+              <ScrollView>
+                <View>
+                  <CardItem>
+                    <View style={styles.viewImageHistoryCard}>
+                      <Image
+                        style={styles.imageHistoryCard}
+                        source={require('../../../assets/images/clock.png')}
+                      />
+                    </View>
+                    <View style={styles.viewHistoryCardInfo}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            region: {
+                              longitude: this.state.point.coordinate.longitude,
+                              latitude: this.state.point.coordinate.latitude,
+                              longitudeDelta: dimens.delta,
+                              latitudeDelta: dimens.delta,
+                            },
+                            searchStatus: false,
+                            status: false,
+                          });
+                        }}>
+                        <Text style={styles.textNameHistoryCard}>Arthur</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.textAddressHistoryCard}>
+                        112/59 Tran Cao Van
+                      </Text>
+                    </View>
+                  </CardItem>
+                </View>
+                <View>
+                  <CardItem>
+                    <View style={styles.viewImageHistoryCard}>
+                      <Image
+                        style={styles.imageHistoryCard}
+                        source={require('../../../assets/images/clock.png')}
+                      />
+                    </View>
+                    <View style={styles.viewHistoryCardInfo}>
+                      <TouchableOpacity>
+                        <Text style={styles.textNameHistoryCard}>Ben</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.textAddressHistoryCard}>
+                        23 Ly Dao Thanh
+                      </Text>
+                    </View>
+                  </CardItem>
+                </View>
+                <View>
+                  <CardItem>
+                    <View style={styles.viewImageHistoryCard}>
+                      <Image
+                        style={styles.imageHistoryCard}
+                        source={require('../../../assets/images/clock.png')}
+                      />
+                    </View>
+                    <View style={styles.viewHistoryCardInfo}>
+                      <TouchableOpacity>
+                        <Text style={styles.textNameHistoryCard}>Shawn</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.textAddressHistoryCard}>
+                        193 Nguyen Luong Bang
+                      </Text>
+                    </View>
+                  </CardItem>
+                </View>
+                <View>
+                  <CardItem>
+                    <View style={styles.viewImageHistoryCard}>
+                      <Image
+                        style={styles.imageHistoryCard}
+                        source={require('../../../assets/images/clock.png')}
+                      />
+                    </View>
+                    <View style={styles.viewHistoryCardInfo}>
+                      <TouchableOpacity>
+                        <Text style={styles.textNameHistoryCard}>Dung</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.textAddressHistoryCard}>
+                        67 Pham Hung
+                      </Text>
+                    </View>
+                  </CardItem>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        ) : null}
+        <Input
+          placeholder="search location"
+          containerStyle={styles.searchInput}
+          onChangeText={value => this.setState({resultSearch: value})}
+          onFocus={() => {
+            this.showSearchHistory();
+          }}
+          onSubmitEditing={() => {
+            if (this.state.resultSearch === this.state.point.address) {
+              this.setState({
+                region: {
+                  longitude: this.state.point.coordinate.longitude,
+                  latitude: this.state.point.coordinate.latitude,
+                  longitudeDelta: dimens.delta,
+                  latitudeDelta: dimens.delta,
+                },
+                status: false,
+              });
+            } else {
+              this.setState({
+                region: {
+                  longitude: 108.216629,
+                  latitude: 16.06887,
+                  longitudeDelta: 0.03,
+                  latitudeDelta: 0.03,
+                },
+                status: false,
+              });
+            }
+            this.setState({searchStatus: false});
+          }}
+          leftIcon={
+            <Icon
+              name="car"
+              size={18}
+              color={Colors.appColor}
+              style={{marginRight: 10}}
+            />
+          }
+          rightIcon={
+            <Icon
+              name="search"
+              size={18}
+              color={Colors.appColor}
+              style={{marginRight: 15}}
+            />
+          }
+        />
       </View>
     );
   }
