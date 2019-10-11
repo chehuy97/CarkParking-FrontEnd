@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import styles from './Styles';
 import strings from '../../../constants/Strings';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {View, Text, TouchableOpacity, TextInput, Image} from 'react-native';
-import colors from '../../../constants/Colors'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {Input} from 'react-native-elements';
+import colors from '../../../constants/Colors';
 
 export default class Login extends Component {
   static navigationOptions = {
@@ -37,19 +38,39 @@ export default class Login extends Component {
           <Text style={styles.logoText}> {strings.appName}</Text>
         </View>
         <View style={styles.containerForm}>
-          <TextInput
-            style={styles.inputBox}
-            underlineColorAndroid={colors.loginUnderlineColor}
+          <Input
+            containerStyle={styles.inputBox}
+            inputStyle={{color: 'white'}}
             placeholder="Username"
-            placeholderTextColor= {colors.colorWhite}
+            placeholderTextColor={colors.colorWhite}
+            underlineColorAndroid={colors.colorWhite}
+            leftIcon={
+              <Icon
+                style={styles.inputIcon}
+                name="user"
+                size={25}
+                color={colors.colorWhite}
+                style={{marginRight: 10}}
+              />
+            }
             onChangeText={value => this.setState({name: value})}
           />
-          <TextInput
-            style={styles.inputBox}
-            underlineColorAndroid={colors.loginUnderlineColor}
+          <Input
+            containerStyle={styles.inputBox}
+            inputStyle={{color: 'white'}}
             placeholder="Password"
-            placeholderTextColor={colors.colorWhite}
             secureTextEntry={true}
+            placeholderTextColor={colors.colorWhite}
+            underlineColorAndroid={colors.colorWhite}
+            leftIcon={
+              <Icon
+                style={styles.inputIcon}
+                name="lock"
+                size={25}
+                color={colors.colorWhite}
+                style={{marginRight: 10}}
+              />
+            }
             onChangeText={value => this.setState({pass: value})}
           />
           {/* // value= {this.state.pass}/> */}

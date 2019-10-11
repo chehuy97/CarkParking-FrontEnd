@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import AccountCard from '../../../components/account_card/AccountCard';
 import styles from './Styles';
 import {View} from 'react-native';
-import {Image, Text} from 'react-native-elements';
-import Button from '../../../components/button_app/ButtonApp';
+import {Image, Text, Button} from 'react-native-elements';
 
 export default class Account extends Component {
   render() {
@@ -24,9 +23,10 @@ export default class Account extends Component {
           <AccountCard name="Car" value="7K23-8BC3E" />
           <AccountCard name="Balance" value="1,764,264 VND" />
         </View>
-        <View style={styles.viewButtonEdit}>
+        <View style={styles.viewButton}>
           <Button
-            btnname="Edit"
+            title="Edit"
+            buttonStyle={styles.button}
             onPress={() => {
               this.props.navigation.navigate('AccountEdit');
             }}

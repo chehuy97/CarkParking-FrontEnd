@@ -22,7 +22,7 @@ export default StyleSheet.create({
     marginVertical: dimens.account_viewInfo_marginVertical,
     borderRadius: dimens.account_borderRadius,
   },
-  viewButtonEdit: {
+  viewButton: {
     flex: 1,
     marginTop: dimens.account_viewButton_marginTop,
     marginBottom: dimens.account_viewButton_marginBottom,
@@ -35,5 +35,11 @@ export default StyleSheet.create({
   },
   text: {
     fontSize: dimens.textBigSize,
+  },
+  button: {
+    width: dimens.DEVICE_WIDTH - 20,
+    marginHorizontal: 10,
+    height: 50,
+    backgroundColor: colors.loginButton,
   },
 });

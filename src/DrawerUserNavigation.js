@@ -9,6 +9,7 @@ import Search from './screens/main/search/Search';
 import History from './screens/main/history/History';
 import Payment from './screens/main/payment/Payment';
 import Account from './screens/main/account/Account';
+import AccountEdit from './screens/main/account/AccountEdit';
 import colors from './constants/Colors';
 
 class NavigationDrawerStructure extends Component {
@@ -87,45 +88,66 @@ const Payment_StackNavigator = createStackNavigator({
   },
 });
 
-const Account_StackNavigator = createStackNavigator({
-  Account: {
-    screen: Account,
-    navigationOptions: ({navigation}) => ({
-      title: 'Account',
-      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: colors.appColor,
-      },
-      headerTintColor: colors.colorTextWhite,
-    }),
+const Account_StackNavigator = createStackNavigator(
+  {
+    Account: {
+      screen: Account,
+      navigationOptions: ({navigation}) => ({
+        title: 'Account',
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerStyle: {
+          backgroundColor: colors.appColor,
+        },
+        headerTintColor: colors.colorTextWhite,
+      }),
+    },
+    AccountEdit: {
+      screen: AccountEdit,
+      navigationOptions: ({navigation}) => ({
+        title: 'Edit Account',
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerStyle: {
+          backgroundColor: colors.appColor,
+        },
+        headerTintColor: colors.colorTextWhite,
+      }),
+    },
   },
-});
+  {
+    initialRouteName: 'Account',
+  },
+);
 
-const DrawerUserNavigation = createDrawerNavigator({
-  Home: {
-    screen: Home_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Home',
+const DrawerUserNavigation = createDrawerNavigator(
+  {
+    Home: {
+      screen: Home_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Home',
+      },
+    },
+    History: {
+      screen: History_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'History',
+      },
+    },
+    Account: {
+      screen: Account_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Account',
+      },
+    },
+    Payment: {
+      screen: Payment_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Payment',
+      },
     },
   },
-  History: {
-    screen: History_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'History',
-    },
+  {
+    initialRouteName: 'Account',
   },
-  Account: {
-    screen: Account_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Account',
-    },
-  },
-  Payment: {
-    screen: Payment_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Payment',
-    },
-  },
-});
+);
 
 export default createAppContainer(DrawerUserNavigation);

@@ -44,21 +44,25 @@ export default StyleSheet.create({
     marginLeft: 4,
   },
   inputBox: {
-    width: Dimensions.get('window').width - 50,
+    width: Dimensions.get('window').width - 60,
     backgroundColor: colors.loginInputBox,
     borderRadius: dimens.inputText_borderRadius,
+    paddingHorizontal: 20,
     fontSize: dimens.textSize,
     color: colors.colorWhite,
     height: dimens.inputText_height,
     marginVertical: dimens.inputText_marginVertical,
   },
+  inputIcon: {
+    marginRight: 15,
+  },
   button: {
     backgroundColor: colors.loginButton,
-    width: Dimensions.get('window').width - 50,
+    width: Dimensions.get('window').width - 60,
     borderRadius: dimens.inputText_borderRadius,
     height: dimens.inputText_height,
     marginVertical: dimens.inputText_marginVertical,
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {

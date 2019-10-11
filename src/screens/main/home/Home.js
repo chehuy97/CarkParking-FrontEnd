@@ -61,13 +61,6 @@ export default class Home extends Component {
   changeStatus = () => {
     this.setState({status: false});
   };
-  showSearchHistory = () => {
-    if (this.state.searchStatus == true) {
-      this.setState({searchStatus: false});
-    } else {
-      this.setState({searchStatus: true});
-    }
-  };
   ShowHideTextComponentView = () => {
     if (this.state.status == true) {
       this.setState({status: false});
@@ -281,10 +274,11 @@ export default class Home extends Component {
         ) : null}
         <Input
           placeholder="search location"
+          underlineColorAndroid={Colors.colorWhite}
           containerStyle={styles.searchInput}
           onChangeText={value => this.setState({resultSearch: value})}
           onFocus={() => {
-            this.showSearchHistory();
+            this.setState({searchStatus: true});
           }}
           onSubmitEditing={() => {
             if (this.state.resultSearch === this.state.point.address) {

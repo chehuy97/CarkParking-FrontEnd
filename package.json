@@ -10,6 +10,7 @@
   "dependencies": {
     "@react-native-community/geolocation": "^2.0.2",
     "native-base": "^2.13.8",
+    "radio-button-react-native": "^1.1.6",
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-elements": "^1.2.0",

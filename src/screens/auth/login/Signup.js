@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import styles from './Styles';
 import strings from '../../../constants/Strings';
-import {View, Text, TouchableOpacity, TextInput, Image} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {Input} from 'react-native-elements';
 import colors from '../../../constants/Colors';
-
 export default class Signup extends Component {
   static navigationOptions = {
     headerMode: 'none',
@@ -20,23 +21,41 @@ export default class Signup extends Component {
           <Text style={styles.logoText}> {strings.signupName}</Text>
         </View>
         <View style={styles.containerForm}>
-          <TextInput
-            style={styles.inputBox}
-            underlineColorAndroid={colors.loginUnderlineColor}
+          <Input
+            containerStyle={styles.inputBox}
             placeholder="Username"
             placeholderTextColor={colors.colorWhite}
+            underlineColorAndroid={colors.colorWhite}
+            leftIcon={
+              <Icon
+                style={styles.inputIcon}
+                name="user"
+                size={25}
+                color={colors.colorWhite}
+                style={{marginRight: 10}}
+              />
+            }
             onChangeText={value => this.setState({name: value})}
           />
-          <TextInput
-            style={styles.inputBox}
-            underlineColorAndroid={colors.loginUnderlineColor}
+          <Input
+            containerStyle={styles.inputBox}
+            secureTextEntry={true}
             placeholder="Password"
             placeholderTextColor={colors.colorWhite}
-            secureTextEntry={true}
+            underlineColorAndroid={colors.colorWhite}
+            leftIcon={
+              <Icon
+                style={styles.inputIcon}
+                name="lock"
+                size={25}
+                color={colors.colorWhite}
+                style={{marginRight: 10}}
+              />
+            }
             onChangeText={value => this.setState({pass: value})}
           />
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Signup</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.signupTextCont}>
