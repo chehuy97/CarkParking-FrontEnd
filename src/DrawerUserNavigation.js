@@ -10,6 +10,7 @@ import History from './screens/main/history/History';
 import Payment from './screens/main/payment/Payment';
 import Account from './screens/main/account/Account';
 import AccountEdit from './screens/main/account/AccountEdit';
+import AccountCar from './screens/main/account/AccountCar';
 import colors from './constants/Colors';
 
 class NavigationDrawerStructure extends Component {
@@ -105,6 +106,17 @@ const Account_StackNavigator = createStackNavigator(
       screen: AccountEdit,
       navigationOptions: ({navigation}) => ({
         title: 'Edit Account',
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerStyle: {
+          backgroundColor: colors.appColor,
+        },
+        headerTintColor: colors.colorTextWhite,
+      }),
+    },
+    AccountCar: {
+      screen: AccountCar,
+      navigationOptions: ({navigation}) => ({
+        title: 'Account Car',
         headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
         headerStyle: {
           backgroundColor: colors.appColor,

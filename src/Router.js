@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 //import { createStackNavigator } from 'react-navigation-stack'
 import Login from './screens/auth/login/Login';
-import Signup from './screens/auth/login/Signup';
+import Signup from './screens/auth/signup/Signup';
 import Home from './screens/main/home/Home';
 import DrawerUserNavigation from './DrawerUserNavigation';
 import DrawerOnwerNavigation from './DrawerOwnerNavigation';
@@ -13,7 +13,6 @@ const RootStack = createSwitchNavigator(
     Signup: Signup,
     DrawerUser: DrawerUserNavigation,
     DrawerOnwer: DrawerOnwerNavigation,
-    Home: Home,
   },
   {
     initialRouteName: 'Login',

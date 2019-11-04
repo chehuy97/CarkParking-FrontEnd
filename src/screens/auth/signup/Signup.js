@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import styles from './Styles';
 import strings from '../../../constants/Strings';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {Input} from 'react-native-elements';
 import colors from '../../../constants/Colors';
@@ -13,28 +12,19 @@ export default class Signup extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.containerLogo}>
+        <View style={styles.viewLogo}>
           <Image
             style={{width: 120, height: 120}}
             source={require('../../../assets/images/logo-app.png')}
           />
           <Text style={styles.logoText}> {strings.signupName}</Text>
         </View>
-        <View style={styles.containerForm}>
+        <View style={styles.viewForm}>
           <Input
             containerStyle={styles.inputBox}
             placeholder="Username"
             placeholderTextColor={colors.colorWhite}
             underlineColorAndroid={colors.colorWhite}
-            leftIcon={
-              <Icon
-                style={styles.inputIcon}
-                name="user"
-                size={25}
-                color={colors.colorWhite}
-                style={{marginRight: 10}}
-              />
-            }
             onChangeText={value => this.setState({name: value})}
           />
           <Input
@@ -43,22 +33,42 @@ export default class Signup extends Component {
             placeholder="Password"
             placeholderTextColor={colors.colorWhite}
             underlineColorAndroid={colors.colorWhite}
-            leftIcon={
-              <Icon
-                style={styles.inputIcon}
-                name="lock"
-                size={25}
-                color={colors.colorWhite}
-                style={{marginRight: 10}}
-              />
-            }
             onChangeText={value => this.setState({pass: value})}
           />
+          <Input
+            containerStyle={styles.inputBox}
+            placeholder="Name"
+            placeholderTextColor={colors.colorWhite}
+            underlineColorAndroid={colors.colorWhite}
+            onChangeText={value => this.setState({name: value})}
+          />
+          <Input
+            containerStyle={styles.inputBox}
+            placeholder="Birthday"
+            placeholderTextColor={colors.colorWhite}
+            underlineColorAndroid={colors.colorWhite}
+            onChangeText={value => this.setState({name: value})}
+          />
+          <Input
+            containerStyle={styles.inputBox}
+            placeholder="Gender"
+            placeholderTextColor={colors.colorWhite}
+            underlineColorAndroid={colors.colorWhite}
+            onChangeText={value => this.setState({name: value})}
+          />
+          <Input
+            containerStyle={styles.inputBox}
+            placeholder="Phone"
+            placeholderTextColor={colors.colorWhite}
+            underlineColorAndroid={colors.colorWhite}
+            onChangeText={value => this.setState({name: value})}
+          />
+
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Signup</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.signupTextCont}>
+        <View style={styles.viewSignupTextCont}>
           <Text style={styles.signupText}>{strings.signupAsk}</Text>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Login')}>

@@ -19,8 +19,7 @@ import imageRed from '../../../assets/images/parkingRedSign.png';
 import {CardItem} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../../constants/Colors';
-import HistoryCard from '../../../components/history_cards/HistoryCard';
-
+import axios from 'axios';
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +34,43 @@ export default class Home extends Component {
         longitudeDelta: 0.03,
         latitudeDelta: 0.03,
       },
+      dataOwners: [
+        {
+          id: 0,
+          username: '',
+          password: '',
+          status: true,
+          name: '',
+          birthday: '0000-00-00',
+          gender: 'Male',
+          phone: '',
+          image: 'gdausd4r234hkdfdff',
+          balance: 0,
+          roles: [
+            {
+              id: 2,
+              role_name: '',
+            },
+          ],
+          yard: {
+            id: 0,
+            acreage: 0,
+            point: 12,
+            status: true,
+            address: '',
+            latitude: 0,
+            longitude: 0,
+            accountId: 0,
+          },
+        },
+      ],
+      ownersClick: {
+        id: '',
+        latitude: '',
+        longitude: '',
+        name: '',
+        address: '',
+      },
       point: {
         key: 0,
         coordinate: {
@@ -44,11 +80,12 @@ export default class Home extends Component {
         name: 'Arthur',
         address: 'Abc',
       },
-      status: false,
+      cardStatus: false,
       searchStatus: false,
     };
   }
   componentDidMount() {
+    this.getAccount();
     Geolocation.getCurrentPosition(position => {
       this.setState({
         latitude: position.coords.latitude,
@@ -59,25 +96,23 @@ export default class Home extends Component {
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000};
   }
   changeStatus = () => {
-    this.setState({status: false});
+    this.setState({cardStatus: false});
   };
-  ShowHideTextComponentView = () => {
-    if (this.state.status == true) {
-      this.setState({status: false});
-    } else {
-      this.setState({status: true});
-      this.showViewTrue();
-    }
-  };
-  showViewTrue = () => {
+  showViewTrue = (latitude, longitude) => {
     this.setState({
       region: {
-        longitude: this.state.point.coordinate.longitude,
-        latitude: this.state.point.coordinate.latitude,
-        longitudeDelta: dimens.delta,
+        latitude: latitude,
+        longitude: longitude,
         latitudeDelta: dimens.delta,
+        longitudeDelta: dimens.delta,
       },
     });
+  };
+  getAccount = async () => {
+    var res = await axios.get(
+      `http://192.168.21.90:3000/api/customers/owneraddress`,
+    );
+    this.setState({dataOwners: res.data});
   };
   render() {
     return (
@@ -88,19 +123,46 @@ export default class Home extends Component {
           region={this.state.region}
           style={styles.map}>
           <Marker coordinate={this.state} />
-          <Marker
-            coordinate={this.state.point.coordinate}
-            title={this.state.point.name}
-            description={this.state.point.address}
-            onPress={() => this.ShowHideTextComponentView()}
-            image={imageGreen}></Marker>
+          {/* <Marker
+            coordinate={{
+              longitude: this.state.dataOwners[0].yard.longitude,
+              latitude: this.state.dataOwners[0].yard.latitude,
+            }}
+          /> */}
+          {this.state.dataOwners.map(item => (
+            <Marker
+              coordinate={{
+                longitude: item.yard.longitude,
+                latitude: item.yard.latitude,
+              }}
+              title={item.name}
+              description={item.yard.address}
+              onPress={() => {
+                this.setState({
+                  ownersClick: {
+                    id: item.id,
+                    latitude: item.yard.latitude,
+                    longitude: item.yard.longitude,
+                    name: item.name,
+                    address: item.yard.address,
+                  },
+                  cardStatus: true,
+                });
+                this.showViewTrue(item.yard.latitude, item.yard.longitude);
+              }}
+              image={imageGreen}></Marker>
+          ))}
         </MapView>
-        {this.state.status ? (
+        {this.state.cardStatus ? (
           <View>
             <View style={styles.detailView}>
-              <Text style={styles.detailName}>Arthur</Text>
+              <Text style={styles.detailName}>
+                {this.state.ownersClick.name}
+              </Text>
               <CardItem style={styles.detailAddressCard}>
-                <Text style={styles.detailAddress}>112/59 Tran Cao Van</Text>
+                <Text style={styles.detailAddress}>
+                  {this.state.ownersClick.address}
+                </Text>
                 <Icon
                   name="car"
                   size={15}
@@ -203,7 +265,7 @@ export default class Home extends Component {
                               latitudeDelta: dimens.delta,
                             },
                             searchStatus: false,
-                            status: false,
+                            cardStatus: false,
                           });
                         }}>
                         <Text style={styles.textNameHistoryCard}>Arthur</Text>
@@ -289,7 +351,7 @@ export default class Home extends Component {
                   longitudeDelta: dimens.delta,
                   latitudeDelta: dimens.delta,
                 },
-                status: false,
+                cardStatus: false,
               });
             } else {
               this.setState({
@@ -299,7 +361,7 @@ export default class Home extends Component {
                   longitudeDelta: 0.03,
                   latitudeDelta: 0.03,
                 },
-                status: false,
+                cardStatus: false,
               });
             }
             this.setState({searchStatus: false});

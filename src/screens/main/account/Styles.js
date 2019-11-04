@@ -32,14 +32,30 @@ export default StyleSheet.create({
   image: {
     width: dimens.account_image,
     height: dimens.account_image,
+    borderRadius: dimens.account_image_radius,
   },
-  text: {
+  textImage: {
     fontSize: dimens.textBigSize,
+    marginTop: 10,
   },
   button: {
     width: dimens.DEVICE_WIDTH - 20,
     marginHorizontal: 10,
     height: 50,
     backgroundColor: colors.loginButton,
+  },
+  containerCard: {
+    flex: 1,
+    borderWidth: dimens.accountCard_boderWidth,
+    borderColor: colors.colorPage,
+    borderRadius: dimens.account_borderRadius,
+  },
+  textName: {
+    width: 90,
+    fontWeight: 'bold',
+  },
+  textValue: {
+    width: 250,
+    marginLeft: 10,
   },
 });

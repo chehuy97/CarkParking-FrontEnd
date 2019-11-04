@@ -2,31 +2,59 @@ import React, {Component} from 'react';
 import styles from './Styles';
 import strings from '../../../constants/Strings';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, AsyncStorage} from 'react-native';
 import {Input} from 'react-native-elements';
 import colors from '../../../constants/Colors';
+import axios from 'axios';
 
 export default class Login extends Component {
-  static navigationOptions = {
-    headerMode: 'none',
-    header: null,
-  };
+  // static navigationOptions = {
+  //   headerMode: 'none',
+  //   header: null,
+  // };
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      pass: '',
+      username: '',
+      password: '',
+      token: '',
+      account: '',
+      wrongaccount: false,
     };
   }
   validate() {
-    if (this.state.name === 'Che' && this.state.pass === '123') {
+    // this.login();
+    if (this.state.username === 'Che' && this.state.password === '123') {
       this.props.navigation.navigate('DrawerOnwer');
-    } else if (this.state.name === 'Huy' && this.state.pass === '123') {
+    } else if (this.state.username === 'Huy' && this.state.password === '123') {
       this.props.navigation.navigate('DrawerUser');
     } else {
       this.props.navigation.navigate('Login');
     }
   }
+
+  login = async () => {
+    axios
+      .post('http://192.168.21.90:3000/api/accounts/login', {
+        username: this.state.username,
+        password: this.state.password,
+      })
+      .then(async response => {
+        if (response.data === 'wrong') {
+          alert('You type wrong name or password');
+        } else {
+          await AsyncStorage.setItem(
+            'accountId',
+            response.data.account.id + '',
+          );
+          this.props.navigation.navigate('DrawerUser');
+          // await AsyncStorage.removeItem('accountId');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -53,7 +81,7 @@ export default class Login extends Component {
                 style={{marginRight: 10}}
               />
             }
-            onChangeText={value => this.setState({name: value})}
+            onChangeText={value => this.setState({username: value})}
           />
           <Input
             containerStyle={styles.inputBox}
@@ -71,12 +99,9 @@ export default class Login extends Component {
                 style={{marginRight: 10}}
               />
             }
-            onChangeText={value => this.setState({pass: value})}
+            onChangeText={value => this.setState({password: value})}
           />
-          {/* // value= {this.state.pass}/> */}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.validate()}>
+          <TouchableOpacity style={styles.button} onPress={() => this.login()}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>

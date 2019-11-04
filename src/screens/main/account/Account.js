@@ -1,27 +1,75 @@
 import React, {Component} from 'react';
 import AccountCard from '../../../components/account_card/AccountCard';
 import styles from './Styles';
-import {View} from 'react-native';
-import {Image, Text, Button} from 'react-native-elements';
+import {View, TouchableOpacity, AsyncStorage} from 'react-native';
+import {CardItem, Text} from 'native-base';
+import {Image, Button} from 'react-native-elements';
+import Axios from 'axios';
 
 export default class Account extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataId: '',
+      account: {
+        id: 0,
+        username: '',
+        password: '',
+        status: true,
+        name: '',
+        birthday: '',
+        gender: '',
+        phone: '',
+        image: '',
+        balance: 120000,
+        car: {
+          id: 0,
+          color: '',
+          brand: '',
+          car_number: '',
+          accountId: 0,
+        },
+      },
+    };
+  }
+  getAccount = async () => {
+    var id = await AsyncStorage.getItem('accountId');
+    console.log('id la: ' + id);
+    Axios.get('http://192.168.21.90:3000/api/customers/' + id)
+      .then(async res => {
+        this.setState({account: res.data});
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  componentDidMount() {
+    this.getAccount();
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.viewImage}>
           <Image
-            source={require('../../../assets/images/userImage.png')}
+            source={{uri: this.state.account.image}}
             style={styles.image}
           />
-          <Text style={styles.text}>Chehuy97</Text>
+          <Text style={styles.textImage}>{this.state.account.username}</Text>
         </View>
         <View style={styles.viewInfo}>
-          <AccountCard name="Name " value="Harry Kane" />
-          <AccountCard name="Sex " value="Male" />
-          <AccountCard name="Age " value="25" />
-          <AccountCard name="Address " value="17 Bil Nilchoson" />
-          <AccountCard name="Car" value="7K23-8BC3E" />
-          <AccountCard name="Balance" value="1,764,264 VND" />
+          <AccountCard name="Name " value={this.state.account.name} />
+          <AccountCard name="Gender " value={this.state.account.gender} />
+          <AccountCard name="Birthday " value={this.state.account.birthday} />
+          <AccountCard name="Phone" value={this.state.account.phone} />
+          <CardItem style={styles.containerCard}>
+            <Text style={styles.textName}>Car</Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('AccountCar')}>
+              <Text style={styles.textValue}>Detail</Text>
+            </TouchableOpacity>
+          </CardItem>
+          <AccountCard name="Balance" value={this.state.account.balance} />
         </View>
         <View style={styles.viewButton}>
           <Button

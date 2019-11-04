@@ -4,7 +4,7 @@ import dimens from '../../constants/Dimens';
 
 export default StyleSheet.create({
   container: {
-    height: 70,
+    flex: 1,
     borderWidth: dimens.accountCard_boderWidth,
     borderColor: colors.colorPage,
     borderRadius: dimens.account_borderRadius,
@@ -19,5 +19,16 @@ export default StyleSheet.create({
   },
   textInput: {
     width: 270,
+  },
+  radioButton: {
+    marginLeft: 25,
+  },
+  picker: {
+    width: 90,
+    height: 50,
+  },
+  textInputBirth: {
+    width: 80,
+    marginRight: 10,
   },
 });
