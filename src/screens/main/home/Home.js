@@ -179,7 +179,13 @@ export default class Home extends Component {
                     this.props.navigation.navigate('Search');
                   }}
                 />
-                <Button title="Booking" buttonStyle={styles.detailButton} />
+                <Button
+                  title="Booking"
+                  buttonStyle={styles.detailButton}
+                  onPress={() => {
+                    this.props.navigation.navigate('Booking');
+                  }}
+                />
               </CardItem>
             </View>
             <TouchableOpacity

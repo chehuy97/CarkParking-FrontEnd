@@ -58,4 +58,5 @@ export default StyleSheet.create({
     width: 250,
     marginLeft: 10,
   },
+  //car
 });

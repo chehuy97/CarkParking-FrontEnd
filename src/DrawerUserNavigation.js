@@ -11,6 +11,7 @@ import Payment from './screens/main/payment/Payment';
 import Account from './screens/main/account/Account';
 import AccountEdit from './screens/main/account/AccountEdit';
 import AccountCar from './screens/main/account/AccountCar';
+import Booking from './screens/main/booking/Booking';
 import colors from './constants/Colors';
 
 class NavigationDrawerStructure extends Component {
@@ -23,7 +24,7 @@ class NavigationDrawerStructure extends Component {
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
           <Image
             source={require('./assets/images/drawer.png')}
-            style={{width: 25, height: 25, marginLeft: 5}}
+            style={{width: 30, height: 30, marginLeft: 5}}
           />
         </TouchableOpacity>
       </View>
@@ -44,6 +45,17 @@ const Home_StackNavigator = createStackNavigator(
         headerTintColor: colors.colorTextWhite,
       }),
     },
+    Booking: {
+      screen: Booking,
+      navigationOptions: ({navigation}) => ({
+        title: 'Booking',
+        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+        headerStyle: {
+          backgroundColor: colors.appColor,
+        },
+        headerTintColor: colors.colorTextWhite,
+      }),
+    },
     Search: {
       screen: Search,
       navigationOptions: ({navigation}) => ({
@@ -57,7 +69,7 @@ const Home_StackNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Booking',
   },
 );
 
@@ -158,7 +170,7 @@ const DrawerUserNavigation = createDrawerNavigator(
     },
   },
   {
-    initialRouteName: 'Account',
+    initialRouteName: 'Home',
   },
 );
 
