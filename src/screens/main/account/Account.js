@@ -34,7 +34,6 @@ export default class Account extends Component {
   }
   getAccount = async () => {
     var id = await AsyncStorage.getItem('accountId');
-    console.log('id la: ' + id);
     Axios.get('http://192.168.21.90:3000/api/customers/' + id)
       .then(async res => {
         this.setState({account: res.data});

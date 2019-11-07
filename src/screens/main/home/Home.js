@@ -123,12 +123,6 @@ export default class Home extends Component {
           region={this.state.region}
           style={styles.map}>
           <Marker coordinate={this.state} />
-          {/* <Marker
-            coordinate={{
-              longitude: this.state.dataOwners[0].yard.longitude,
-              latitude: this.state.dataOwners[0].yard.latitude,
-            }}
-          /> */}
           {this.state.dataOwners.map(item => (
             <Marker
               coordinate={{

@@ -15,7 +15,7 @@ export default StyleSheet.create({
   },
   viewBookedShedule: {
     flex: 3,
-    backgroundColor: '#6497b1',
+    backgroundColor: 'white',
     borderRadius: 5,
     marginTop: 5,
   },
@@ -63,11 +63,17 @@ export default StyleSheet.create({
   dialogCarNumber: {
     backgroundColor: colors.colorWhite,
     borderRadius: 7,
+    height: 240,
   },
   dialogCardCarNumber: {
     height: 60,
     borderBottomColor: colors.colorPage,
     borderBottomWidth: 1,
+  },
+  dialogTime: {
+    backgroundColor: colors.colorWhite,
+    borderRadius: 7,
+    height: 300,
   },
   pickerTime: {
     width: 107,
@@ -108,5 +114,22 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: '#b23a48',
     fontSize: dimens.textSize,
+  },
+  timeNumber: {
+    width: 20,
+    height: 20,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lineTimeNone: {
+    width: 40,
+    height: 15,
+    backgroundColor: '#88d8b0',
+  },
+  lineTimeBooked: {
+    width: 40,
+    height: 15,
+    backgroundColor: '#ff1654',
   },
 });
