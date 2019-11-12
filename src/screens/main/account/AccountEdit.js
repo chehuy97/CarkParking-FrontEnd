@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import AccountEditCard from '../../../components/account_card/AccountEditCard';
 import AccountCard from '../../../components/account_card/AccountCard';
 import styles from './Styles';
-import {View, ScrollView} from 'react-native';
-import {Image, Text, Button} from 'react-native-elements';
+import {View, ScrollView, TouchableOpacity} from 'react-native';
+import {Image, Text} from 'react-native-elements';
 import AccountRadioButton from '../../../components/account_card/AccountRadioButton';
 import AccountBirth from '../../../components/account_card/AccountBirth';
 
@@ -33,13 +33,23 @@ export default class AccountEdit extends Component {
           </ScrollView>
         </View>
         <View style={styles.viewButton}>
-          <Button
-            title="Confirm"
-            buttonStyle={styles.button}
+          <TouchableOpacity
+            style={styles.button}
             onPress={() => {
               this.props.navigation.navigate('Account');
-            }}
-          />
+            }}>
+            <View style={styles.viewButtonText}>
+              <Text
+                style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  marginTop: 10,
+                }}>
+                Confirm
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     );

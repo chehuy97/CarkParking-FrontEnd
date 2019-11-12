@@ -6,6 +6,7 @@ import {
   Text,
   Button,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 import YardInfoCard from '../../../components/booking_card/YardInfoCard';
 import styles from './Styles';
@@ -15,19 +16,27 @@ import {Icon} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Axios from 'axios';
 
-export default class componentName extends Component {
+export default class Booking extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      carNumber: 'HR26DK8337',
+      carNumber: '',
       clickedCarNumber: false,
       timeCome: 0,
       timeLeave: 0,
+      timeLeaveLine: 0,
+      slot: 0,
+      slotKey: 0,
+      clickedSlot: false,
       clickedTimeCome: false,
       clickedTimeLeave: false,
-      addressData: {},
-      //slotData: [],
+      addressData: {time_open: 0, time_close: 0},
       lenghtSlot: 0,
+      AccountCars: {},
+      lengthCar: 0,
+      timeStart: 0,
+      timeOpen: 0,
+      timeClose: 0,
     };
   }
   changeClickCarNumber = () => {
@@ -63,44 +72,82 @@ export default class componentName extends Component {
       clickedTimeLeave: !this.state.clickedTimeLeave,
     });
   };
+  changeClickSlot = () => {
+    this.setState({
+      clickedSlot: !this.state.clickedSlot,
+    });
+  };
+  chooseSlot = (slot, slotkey) => {
+    this.setState({
+      slot: slot,
+      slotKey: slotkey,
+      clickedSlot: !this.state.clickedSlot,
+    });
+  };
   getAddressOwner = async () => {
-    var id = 2;
-    Axios.get('http://192.168.21.90:3000/api/customers/owneraddress/' + id)
+    //var id = this.props.navigation.getParam('yardId', 'default value');
+    Axios.get('http://192.168.21.90:3000/api/customers/owneraddress/' + 1)
       .then(async res => {
         this.setState({
           addressData: res.data,
           lenghtSlot: res.data.slots.length,
+          timeOpen: res.data.time_open,
+          timeClose: res.data.time_close,
         });
-        //console.log(this.state.addressData);
       })
       .catch(error => {
         console.log(error);
       });
   };
-  componentDidMount() {
-    this.getAddressOwner();
-    // console.log();
-  }
+  getAccountCars = async () => {
+    var id = await AsyncStorage.getItem('accountId');
+    Axios.get('http://192.168.21.90:3000/api/customers/cars/' + id)
+      .then(async res => {
+        this.setState({
+          carNumber: res.data[0].car_number,
+          AccountCars: res.data,
+          lengthCar: res.data.length,
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  setTimeStart = async () => {
+    const currentTime = await new Date().getHours();
+    if (
+      currentTime < this.state.timeOpen ||
+      currentTime > this.state.timeClose
+    ) {
+      this.setState({timeStart: this.state.addressData.time_open});
+    } else {
+      this.setState({timeStart: currentTime});
+    }
+  };
+  componentDidMount = async () => {
+    await this.getAddressOwner();
+    await this.getAccountCars();
+    await this.setTimeStart();
+  };
   render() {
-    const timeCome = [];
-    for (i = 0; i < 24; i++) {
-      timeCome.push({key: i});
-    }
-    const timeLeave = [];
-    for (i = this.state.timeCome + 1; i < 24; i++) {
-      timeLeave.push({key: i});
-    }
     const keySlot = [];
     for (i = 0; i < this.state.lenghtSlot; i++) {
       keySlot.push({key: i});
     }
-    // const keyTime = [];
-    // for (i = 0; i < 24; i++) {
-    //   if(this.state.addressData.slots)
-    // }
+    const keyCar = [];
+    for (i = 0; i < this.state.lengthCar; i++) {
+      keyCar.push({key: i});
+    }
+    const timeCome = [];
+    const timeBooked = [];
+    const timeLeave = [];
+    for (i = this.state.timeCome + 1; i <= this.state.timeLeaveLine; i++) {
+      timeLeave.push({key: i});
+    }
+
     const keyTime = [];
     for (
-      i = this.state.addressData.time_open;
+      i = this.state.timeStart;
       i <= this.state.addressData.time_close;
       i++
     ) {
@@ -110,21 +157,30 @@ export default class componentName extends Component {
       <View style={styles.container}>
         <View style={styles.viewImage}>
           <Image
-            source={require('../../../assets/images/imgAddress.png')}
+            source={{uri: this.state.addressData.image_yard}}
             style={styles.imageAddress}
           />
           <View>
             <YardInfoCard
               iconName="location"
               name="Address:"
-              value="112/59 Tran Cao Van"
+              value={this.state.addressData.address}
             />
             <YardInfoCard
               iconName="clock"
               name="Open time:"
-              value="6:00 - 22:00"
+              value={
+                this.state.addressData.time_open +
+                ':00 - ' +
+                this.state.addressData.time_close +
+                ':00'
+              }
             />
-            <YardInfoCard iconName="tag" name="Slot:" value="2 available" />
+            <YardInfoCard
+              iconName="tag"
+              name="Slot:"
+              value={this.state.lenghtSlot + ' available'}
+            />
           </View>
         </View>
         <View style={styles.viewBookedShedule}>
@@ -157,12 +213,29 @@ export default class componentName extends Component {
                     this.state.addressData.slots[slot.key].times[time.key] ===
                     '0'
                   ) {
+                    timeCome.push({
+                      keySlot: slot.key,
+                      keyTime: time.key,
+                    });
                     return <View style={styles.lineTimeNone} />;
                   } else if (
                     this.state.addressData.slots[slot.key].times[time.key] ===
                     '1'
                   ) {
+                    timeBooked.push({
+                      keySlot: slot.key,
+                      keyTime: time.key,
+                    });
+
                     return <View style={styles.lineTimeBooked} />;
+                  } else if (
+                    this.state.addressData.slots[slot.key].times[time.key] ===
+                    '*'
+                  ) {
+                    timeBooked.push({
+                      keySlot: slot.key,
+                      keyTime: time.key,
+                    });
                   }
                 })}
               </View>
@@ -192,32 +265,29 @@ export default class componentName extends Component {
                 <CardItem style={styles.dialogCardCarNumber}>
                   <Text style={{fontWeight: 'bold'}}>CAR NUMBER</Text>
                 </CardItem>
-                <TouchableOpacity
-                  onPress={() => this.chooseCarNumber('HR26DK8337')}>
-                  <CardItem style={styles.dialogCardCarNumber}>
-                    <Text style={{flex: 5}}>HR26DK8337</Text>
-                    <Icon
-                      style={{flex: 1}}
-                      name="arrow-right"
-                      size={30}
-                      color={colors.loginButton}
-                      type="evilicon"
-                    />
-                  </CardItem>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => this.chooseCarNumber('HD87LY9284')}>
-                  <CardItem style={styles.dialogCardCarNumber}>
-                    <Text style={{flex: 5}}>HD87LY9284</Text>
-                    <Icon
-                      style={{flex: 1}}
-                      name="arrow-right"
-                      size={30}
-                      color={colors.loginButton}
-                      type="evilicon"
-                    />
-                  </CardItem>
-                </TouchableOpacity>
+                <ScrollView>
+                  {keyCar.map(({key}) => (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.chooseCarNumber(
+                          this.state.AccountCars[key].car_number,
+                        )
+                      }>
+                      <CardItem style={styles.dialogCardCarNumber}>
+                        <Text style={{flex: 5}}>
+                          {this.state.AccountCars[key].car_number}
+                        </Text>
+                        <Icon
+                          style={{flex: 1}}
+                          name="arrow-right"
+                          size={30}
+                          color={colors.loginButton}
+                          type="evilicon"
+                        />
+                      </CardItem>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
                 <TouchableOpacity onPress={() => this.changeClickCarNumber()}>
                   <CardItem style={styles.dialogCardCarNumber}>
                     <Text>Close</Text>
@@ -227,10 +297,59 @@ export default class componentName extends Component {
             </Modal>
           </CardItem>
           <CardItem style={styles.cardBooking}>
+            <Text style={styles.bookingText}>SLOT:</Text>
+            <TouchableOpacity
+              style={styles.pickerTime}
+              onPress={() => this.changeClickSlot()}>
+              <View style={styles.textTime}>
+                <Text>{this.state.slotKey + 1}</Text>
+              </View>
+              <View style={styles.downIcon}>
+                <Icon
+                  name="chevron-down"
+                  size={23}
+                  color="gray"
+                  type="evilicon"
+                />
+              </View>
+            </TouchableOpacity>
+            <Modal isVisible={this.state.clickedSlot}>
+              <View style={styles.dialogTime}>
+                <CardItem style={styles.dialogCardCarNumber}>
+                  <Text style={{fontWeight: 'bold'}}>SLOT</Text>
+                </CardItem>
+                <ScrollView style={{height: 180, backgroundColor: 'white'}}>
+                  {keySlot.map(({key}) => (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.chooseSlot(this.state.addressData.slots[key], key)
+                      }>
+                      <CardItem style={styles.dialogCardCarNumber}>
+                        <Text style={{flex: 5}}>Slot {key + 1}</Text>
+                        <Icon
+                          style={{flex: 1}}
+                          name="arrow-right"
+                          size={30}
+                          color={colors.loginButton}
+                          type="evilicon"
+                        />
+                      </CardItem>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+                <TouchableOpacity onPress={() => this.changeClickSlot()}>
+                  <CardItem style={styles.dialogCardCarNumber}>
+                    <Text>Close</Text>
+                  </CardItem>
+                </TouchableOpacity>
+              </View>
+            </Modal>
             <Text style={styles.bookingText}>COME:</Text>
             <TouchableOpacity
               style={styles.pickerTime}
-              onPress={() => this.changeClickTimeCome()}>
+              onPress={() => {
+                this.changeClickTimeCome();
+              }}>
               <View style={styles.textTime}>
                 <Text>{this.state.timeCome}:00</Text>
               </View>
@@ -249,20 +368,40 @@ export default class componentName extends Component {
                   <Text style={{fontWeight: 'bold'}}>Time Come</Text>
                 </CardItem>
                 <ScrollView style={{height: 180, backgroundColor: 'white'}}>
-                  {timeCome.map(({key}) => (
-                    <TouchableOpacity onPress={() => this.chooseTimeCome(key)}>
-                      <CardItem style={styles.dialogCardCarNumber}>
-                        <Text style={{flex: 5}}>{key}:00</Text>
-                        <Icon
-                          style={{flex: 1}}
-                          name="arrow-right"
-                          size={30}
-                          color={colors.loginButton}
-                          type="evilicon"
-                        />
-                      </CardItem>
-                    </TouchableOpacity>
-                  ))}
+                  {timeCome.map(({keySlot, keyTime}) => {
+                    if (keySlot === this.state.slotKey) {
+                      return (
+                        <TouchableOpacity
+                          onPress={async () => {
+                            await this.chooseTimeCome(keyTime);
+                            var time = await this.state.timeCome;
+                            for (i = 0; i < timeBooked.length; i++) {
+                              if (
+                                time < timeBooked[i].keyTime &&
+                                timeBooked[i].keySlot == this.state.slotKey
+                              ) {
+                                this.setState({
+                                  timeLeaveLine: timeBooked[i].keyTime,
+                                });
+                                console.log(this.state.timeLeaveLine);
+                                break;
+                              }
+                            }
+                          }}>
+                          <CardItem style={styles.dialogCardCarNumber}>
+                            <Text style={{flex: 5}}>{keyTime}:00</Text>
+                            <Icon
+                              style={{flex: 1}}
+                              name="arrow-right"
+                              size={30}
+                              color={colors.loginButton}
+                              type="evilicon"
+                            />
+                          </CardItem>
+                        </TouchableOpacity>
+                      );
+                    }
+                  })}
                 </ScrollView>
                 <TouchableOpacity onPress={() => this.changeClickTimeCome()}>
                   <CardItem style={styles.dialogCardCarNumber}>
@@ -320,7 +459,10 @@ export default class componentName extends Component {
         <View style={styles.viewButton}>
           <View style={styles.viewPrice}>
             <Text style={styles.textPrice}>Price:</Text>
-            <Text style={styles.textPriceValue}>20,000</Text>
+            <Text style={styles.textPriceValue}>
+              {(this.state.timeLeave - this.state.timeCome) *
+                this.state.addressData.price}
+            </Text>
             <Text style={styles.textPrice}>VND</Text>
           </View>
           <TouchableOpacity style={styles.viewBtnBooking}>

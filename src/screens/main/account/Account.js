@@ -5,12 +5,14 @@ import {View, TouchableOpacity, AsyncStorage} from 'react-native';
 import {CardItem, Text} from 'native-base';
 import {Image, Button} from 'react-native-elements';
 import Axios from 'axios';
+import Styles from '../../../components/account_card/Styles';
 
 export default class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dataId: '',
+      roleId: 0,
       account: {
         id: 0,
         username: '',
@@ -21,7 +23,7 @@ export default class Account extends Component {
         gender: '',
         phone: '',
         image: '',
-        balance: 120000,
+        balance: 0,
         car: {
           id: 0,
           color: '',
@@ -34,7 +36,7 @@ export default class Account extends Component {
   }
   getAccount = async () => {
     var id = await AsyncStorage.getItem('accountId');
-    Axios.get('http://192.168.21.90:3000/api/customers/' + id)
+    Axios.get('http://192.168.21.90:3000/api/accounts/' + id)
       .then(async res => {
         this.setState({account: res.data});
       })
@@ -42,9 +44,11 @@ export default class Account extends Component {
         console.log(error);
       });
   };
-  componentDidMount() {
-    this.getAccount();
-  }
+  componentDidMount = async () => {
+    await this.getAccount();
+    var role = await AsyncStorage.getItem('roleId');
+    this.setState({roleId: role});
+  };
 
   render() {
     return (
@@ -61,23 +65,47 @@ export default class Account extends Component {
           <AccountCard name="Gender " value={this.state.account.gender} />
           <AccountCard name="Birthday " value={this.state.account.birthday} />
           <AccountCard name="Phone" value={this.state.account.phone} />
-          <CardItem style={styles.containerCard}>
-            <Text style={styles.textName}>Car</Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('AccountCar')}>
-              <Text style={styles.textValue}>Detail</Text>
-            </TouchableOpacity>
-          </CardItem>
+          {this.state.roleId === '3' ? (
+            <CardItem style={styles.containerCard}>
+              <Text style={styles.textName}>Car</Text>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('AccountCar')}>
+                <Text style={styles.textValue}>Detail</Text>
+              </TouchableOpacity>
+            </CardItem>
+          ) : null}
           <AccountCard name="Balance" value={this.state.account.balance} />
         </View>
         <View style={styles.viewButton}>
-          <Button
+          {/* <Button
             title="Edit"
             buttonStyle={styles.button}
             onPress={() => {
               this.props.navigation.navigate('AccountEdit');
             }}
-          />
+          /> */}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.navigation.navigate('AccountEdit');
+            }}>
+            <View style={styles.viewButtonText}>
+              <Text style={{color: 'white', fontWeight: 'bold', marginTop: 10}}>
+                Edit
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.navigation.navigate('Login');
+            }}>
+            <View style={styles.viewButtonText}>
+              <Text style={{color: 'white', fontWeight: 'bold', marginTop: 10}}>
+                Logout
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     );

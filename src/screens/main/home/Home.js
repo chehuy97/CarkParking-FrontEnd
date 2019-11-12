@@ -54,13 +54,12 @@ export default class Home extends Component {
           ],
           yard: {
             id: 0,
-            acreage: 0,
-            point: 12,
             status: true,
             address: '',
             latitude: 0,
             longitude: 0,
-            accountId: 0,
+            time_open: 0,
+            time_close: 0,
           },
         },
       ],
@@ -70,6 +69,7 @@ export default class Home extends Component {
         longitude: '',
         name: '',
         address: '',
+        yardId: '',
       },
       point: {
         key: 0,
@@ -82,11 +82,12 @@ export default class Home extends Component {
       },
       cardStatus: false,
       searchStatus: false,
+      lenghtOwner: 0,
     };
   }
-  componentDidMount() {
-    this.getAccount();
-    Geolocation.getCurrentPosition(position => {
+  componentDidMount = async () => {
+    await this.getAccount();
+    await Geolocation.getCurrentPosition(position => {
       this.setState({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -94,7 +95,7 @@ export default class Home extends Component {
     }),
       error => Alert.alert(error, error),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000};
-  }
+  };
   changeStatus = () => {
     this.setState({cardStatus: false});
   };
@@ -112,9 +113,10 @@ export default class Home extends Component {
     var res = await axios.get(
       `http://192.168.21.90:3000/api/customers/owneraddress`,
     );
-    this.setState({dataOwners: res.data});
+    this.setState({dataOwners: res.data, lenghtOwner: res.data.length});
   };
   render() {
+    var currentTime = new Date().getHours();
     return (
       <View style={styles.container}>
         <MapView
@@ -123,29 +125,34 @@ export default class Home extends Component {
           region={this.state.region}
           style={styles.map}>
           <Marker coordinate={this.state} />
-          {this.state.dataOwners.map(item => (
-            <Marker
-              coordinate={{
-                longitude: item.yard.longitude,
-                latitude: item.yard.latitude,
-              }}
-              title={item.name}
-              description={item.yard.address}
-              onPress={() => {
-                this.setState({
-                  ownersClick: {
-                    id: item.id,
-                    latitude: item.yard.latitude,
+          {this.state.dataOwners.map(item => {
+            if (currentTime < item.yard.time_close) {
+              return (
+                <Marker
+                  coordinate={{
                     longitude: item.yard.longitude,
-                    name: item.name,
-                    address: item.yard.address,
-                  },
-                  cardStatus: true,
-                });
-                this.showViewTrue(item.yard.latitude, item.yard.longitude);
-              }}
-              image={imageGreen}></Marker>
-          ))}
+                    latitude: item.yard.latitude,
+                  }}
+                  title={item.name}
+                  description={item.yard.address}
+                  onPress={() => {
+                    this.setState({
+                      ownersClick: {
+                        id: item.id,
+                        latitude: item.yard.latitude,
+                        longitude: item.yard.longitude,
+                        name: item.name,
+                        address: item.yard.address,
+                        yardId: item.yard.id,
+                      },
+                      cardStatus: true,
+                    });
+                    this.showViewTrue(item.yard.latitude, item.yard.longitude);
+                  }}
+                  image={imageGreen}></Marker>
+              );
+            }
+          })}
         </MapView>
         {this.state.cardStatus ? (
           <View>
@@ -177,7 +184,9 @@ export default class Home extends Component {
                   title="Booking"
                   buttonStyle={styles.detailButton}
                   onPress={() => {
-                    this.props.navigation.navigate('Booking');
+                    this.props.navigation.navigate('Booking', {
+                      yardId: this.state.ownersClick.yardId,
+                    });
                   }}
                 />
               </CardItem>

@@ -18,16 +18,17 @@ export default StyleSheet.create({
   },
   viewInfo: {
     flex: 7,
-    marginHorizontal: dimens.account_viewInfo_marginHorizontal,
+    marginHorizontal: 10,
     marginVertical: dimens.account_viewInfo_marginVertical,
     borderRadius: dimens.account_borderRadius,
   },
   viewButton: {
     flex: 1,
-    marginTop: dimens.account_viewButton_marginTop,
-    marginBottom: dimens.account_viewButton_marginBottom,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // marginTop: dimens.account_viewButton_marginTop,
+    // marginBottom: dimens.account_viewButton_marginBottom,
+    flexDirection: 'row',
+    paddingHorizontal: 5,
+    //justifyContent: 'center',
   },
   image: {
     width: dimens.account_image,
@@ -39,10 +40,17 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    width: dimens.DEVICE_WIDTH - 20,
-    marginHorizontal: 10,
-    height: 50,
+    flex: 1,
     backgroundColor: colors.loginButton,
+    color: colors.colorWhite,
+    marginTop: 5,
+    marginHorizontal: 5,
+    marginBottom: 10,
+    borderRadius: 7,
+  },
+  viewButtonText: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   containerCard: {
     flex: 1,

@@ -17,19 +17,15 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      token: '',
-      account: '',
-      wrongaccount: false,
+      role: 0,
+      user: {},
     };
   }
-  validate() {
-    // this.login();
-    if (this.state.username === 'Che' && this.state.password === '123') {
+  validate(roleId) {
+    if (roleId === 2) {
       this.props.navigation.navigate('DrawerOnwer');
-    } else if (this.state.username === 'Huy' && this.state.password === '123') {
+    } else if (roleId === 3) {
       this.props.navigation.navigate('DrawerUser');
-    } else {
-      this.props.navigation.navigate('Login');
     }
   }
 
@@ -39,16 +35,17 @@ export default class Login extends Component {
         username: this.state.username,
         password: this.state.password,
       })
-      .then(async response => {
-        if (response.data === 'wrong') {
+      .then(async res => {
+        if (res.data === 'wrong') {
           alert('You type wrong name or password');
         } else {
+          await AsyncStorage.setItem('accountId', res.data.account.id + '');
           await AsyncStorage.setItem(
-            'accountId',
-            response.data.account.id + '',
+            'roleId',
+            res.data.account.roles[0].id + '',
           );
-          this.props.navigation.navigate('DrawerUser');
-          // await AsyncStorage.removeItem('accountId');
+          this.setState({user: res.data});
+          this.validate(this.state.user.account.roles[0].id);
         }
       })
       .catch(error => {
