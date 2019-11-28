@@ -20,244 +20,373 @@ export default class Yard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      carNumber: '',
-      clickedCarNumber: false,
-      timeCome: 0,
-      timeLeave: 0,
-      timeLeaveLine: 0,
-      slot: 0,
-      slotKey: 0,
-      clickedSlot: false,
-      clickedTimeCome: false,
-      clickedTimeLeave: false,
-      addressData: {},
-      lenghtSlot: 0,
-      AccountCars: {},
-      lengthCar: 0,
-      timeStart: 0,
+      yardData: [],
+      date: [],
+      clickedDate: false,
+      clickedTimeOpen: false,
+      clickedTimeClose: false,
+      clickedBtnChange: false,
+      clickedConfirm: false,
+      timeChange: true,
+      statusYard: true,
       timeOpen: 0,
       timeClose: 0,
+      dateChoose: 'Chế Đẹp Trai',
     };
   }
-  changeClickCarNumber = () => {
+  changeClickedDate = () => {
     this.setState({
-      clickedCarNumber: !this.state.clickedCarNumber,
+      clickedDate: !this.state.clickedDate,
     });
   };
-  chooseCarNumber = carNumber => {
+  chooseDate = dateChoose => {
     this.setState({
-      carNumber: carNumber,
-      clickedCarNumber: !this.state.clickedCarNumber,
+      dateChoose: dateChoose,
+      clickedDate: !this.state.clickedDate,
     });
   };
-  changeClickTimeCome = () => {
+  changeClickedTimeOpen = () => {
     this.setState({
-      clickedTimeCome: !this.state.clickedTimeCome,
+      clickedTimeOpen: !this.state.clickedTimeOpen,
     });
   };
-  changeClickTimeLeave = () => {
+  chooseTimeOpen = timeOpen => {
     this.setState({
-      clickedTimeLeave: !this.state.clickedTimeLeave,
+      timeOpen: timeOpen,
+      clickedTimeOpen: !this.state.clickedTimeOpen,
     });
   };
-  chooseTimeCome = timeCome => {
+  changeClickedTimeClose = () => {
     this.setState({
-      timeCome: timeCome,
-      clickedTimeCome: !this.state.clickedTimeCome,
+      clickedTimeClose: !this.state.clickedTimeClose,
     });
   };
-  chooseTimeLeave = timeLeave => {
+  chooseTimeClose = timeClose => {
     this.setState({
-      timeLeave: timeLeave,
-      clickedTimeLeave: !this.state.clickedTimeLeave,
+      timeClose: timeClose,
+      clickedTimeClose: !this.state.clickedTimeClose,
     });
   };
-  changeClickSlot = () => {
+  changeClickedBtnChange = () => {
     this.setState({
-      clickedSlot: !this.state.clickedSlot,
+      clickedBtnChange: !this.state.clickedBtnChange,
     });
   };
-  chooseSlot = (slot, slotkey) => {
+  changeTimeChange = () => {
     this.setState({
-      slot: slot,
-      slotKey: slotkey,
-      clickedSlot: !this.state.clickedSlot,
+      statusYard: true,
+      timeChange: !this.state.timeChange,
+      clickedBtnChange: !this.state.clickedBtnChange,
     });
   };
-  getAddressOwner = async () => {
-    var id = await AsyncStorage.getItem('accountId');
-    Axios.get('http://192.168.21.90:3000/api/owners/' + id + '/yards/')
-      .then(async res => {
-        this.setState({
-          addressData: res.data,
-          lenghtSlot: res.data.slots.length,
-          timeOpen: res.data.time_open,
-          timeClose: res.data.time_close,
-        });
-        console.log(this.state.addressData);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  changeStatusChange = () => {
+    this.setState({
+      statusYard: false,
+      timeChange: false,
+      clickedBtnChange: !this.state.clickedBtnChange,
+    });
   };
-  getAccountCars = async () => {
-    var id = await AsyncStorage.getItem('accountId');
-    Axios.get('http://192.168.21.90:3000/api/customers/cars/' + id)
-      .then(async res => {
-        this.setState({
-          carNumber: res.data[0].car_number,
-          AccountCars: res.data,
-          lengthCar: res.data.length,
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  changeConfirm = () => {
+    this.setState({
+      clickedConfirm: !this.state.clickedConfirm,
+    });
   };
-  setTimeStart = () => {
-    var currentTime = new Date().getHours();
-    if (
-      currentTime < this.state.timeOpen ||
-      currentTime > this.state.timeClose
-    ) {
-      this.setState({timeStart: this.state.addressData.time_open});
-    } else {
-      this.setState({timeStart: currentTime});
+  setDay = async () => {
+    var date = await new Date();
+    date.setDate(new Date().getDate() + 5);
+    this.setState({
+      dateChoose:
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(),
+    });
+    for (i = 5; i < 12; i++) {
+      date.setDate(new Date().getDate() + i);
+      var day =
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+      this.state.date.push({day: day});
     }
+  };
+  getDataYard = async () => {
+    var id = await AsyncStorage.getItem('accountId');
+    Axios.get('http://192.168.21.90:3000/api/owners/yards/' + id)
+      .then(async res => {
+        this.setState({
+          yardData: res.data,
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
   componentDidMount = async () => {
-    await this.getAddressOwner();
-    await this.getAccountCars();
-    await this.setTimeStart();
+    await this.getDataYard();
+    await this.setDay();
   };
   render() {
-    const keySlot = [];
-    for (i = 0; i < this.state.lenghtSlot; i++) {
-      keySlot.push({key: i});
+    const timeOpen = [];
+    for (i = 0; i < 24; i++) {
+      timeOpen.push({key: i});
     }
-    const keyCar = [];
-    for (i = 0; i < this.state.lengthCar; i++) {
-      keyCar.push({key: i});
+    const timeClose = [];
+    for (i = this.state.timeOpen + 1; i < 24; i++) {
+      timeClose.push({key: i});
     }
-    const timeCome = [];
-    const timeBooked = [];
-    const timeLeave = [];
-    for (i = this.state.timeCome + 1; i <= this.state.timeLeaveLine; i++) {
-      timeLeave.push({key: i});
-    }
-
-    const keyTime = [];
-    for (
-      i = this.state.timeStart;
-      i <= this.state.addressData.time_close;
-      i++
-    ) {
-      keyTime.push({key: i});
-    }
+    timeClose.push({key: 0});
     return (
       <View style={styles.container}>
         <View style={styles.viewImage}>
           <Image
-            source={{uri: this.state.addressData.image_yard}}
+            source={{uri: this.state.yardData.image_yard}}
             style={styles.imageAddress}
           />
           <View>
             <YardInfoCard
               iconName="location"
               name="Address:"
-              value={this.state.addressData.address}
+              value={this.state.yardData.address}
             />
             <YardInfoCard
               iconName="clock"
               name="Open time:"
               value={
-                this.state.addressData.time_open +
+                this.state.yardData.time_open +
                 ':00 - ' +
-                this.state.addressData.time_close +
+                this.state.yardData.time_close +
                 ':00'
               }
             />
             <YardInfoCard
               iconName="tag"
               name="Slot:"
-              value={this.state.lenghtSlot + ' available'}
+              value={this.state.yardData.slot + ' available'}
             />
           </View>
         </View>
-        <View style={styles.viewBookedShedule}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{flexDirection: 'column'}}>
-            <View style={{flexDirection: 'row', marginTop: 10}}>
-              <Text style={{marginHorizontal: 10, fontWeight: 'bold'}}>
-                Hours
-              </Text>
-              {keyTime.map(item => (
-                <View style={styles.timeNumber}>
-                  <Text style={{fontWeight: 'bold'}}>{item.key}</Text>
-                </View>
-              ))}
-            </View>
-            {keySlot.map(slot => (
-              <View style={{flexDirection: 'row', marginTop: 15}}>
-                <Text
-                  style={{
-                    marginLeft: 10,
-                    marginRight: 28,
-                    fontWeight: 'bold',
-                  }}>
-                  Slot {slot.key + 1}:
-                </Text>
-                {keyTime.map(time => {
-                  if (
-                    this.state.addressData.slots[slot.key].times[time.key] ===
-                    '0'
-                  ) {
-                    timeCome.push({
-                      keySlot: slot.key,
-                      keyTime: time.key,
-                    });
-                    return <View style={styles.lineTimeNone} />;
-                  } else if (
-                    this.state.addressData.slots[slot.key].times[time.key] ===
-                    '1'
-                  ) {
-                    timeBooked.push({
-                      keySlot: slot.key,
-                      keyTime: time.key,
-                    });
-
-                    return <View style={styles.lineTimeBooked} />;
-                  } else if (
-                    this.state.addressData.slots[slot.key].times[time.key] ===
-                    '*'
-                  ) {
-                    timeBooked.push({
-                      keySlot: slot.key,
-                      keyTime: time.key,
-                    });
-                  }
-                })}
+        <View style={styles.viewBookedShedule}></View>
+        <View style={styles.viewBookTime}>
+          <CardItem style={styles.cardBooking}>
+            <Text style={styles.bookingText}>CHANGE STATUS DATE:</Text>
+          </CardItem>
+          <CardItem style={styles.cardBooking}>
+            <Text style={styles.bookingText}>DATE:</Text>
+            <TouchableOpacity
+              style={styles.pickerCarNumber}
+              onPress={() => this.changeClickedDate()}>
+              <View style={styles.textCarNumber}>
+                <Text>{this.state.dateChoose}</Text>
               </View>
-            ))}
-          </ScrollView>
-        </View>
-        <View style={styles.viewBookTime}></View>
-        <View style={styles.viewButton}>
-          <View style={styles.viewPrice}>
-            <Text style={styles.textPrice}>Price:</Text>
-            <Text style={styles.textPriceValue}>
-              {(this.state.timeLeave - this.state.timeCome) *
-                this.state.addressData.price}
-            </Text>
-            <Text style={styles.textPrice}>VND</Text>
-          </View>
-          <TouchableOpacity style={styles.viewBtnBooking}>
+              <View style={styles.downIcon}>
+                <Icon
+                  name="chevron-down"
+                  size={23}
+                  color={colors.loginButton}
+                  type="evilicon"
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.changeClickedBtnChange()}>
+              <View style={styles.btnChange}>
+                <Text style={{color: 'white'}}>Change</Text>
+              </View>
+            </TouchableOpacity>
+            <Modal isVisible={this.state.clickedDate}>
+              <View style={styles.dialogCarNumber}>
+                <CardItem style={styles.dialogCardCarNumber}>
+                  <Text style={{fontWeight: 'bold'}}>Date</Text>
+                </CardItem>
+                <ScrollView>
+                  {this.state.date.map(item => (
+                    <TouchableOpacity onPress={() => this.chooseDate(item.day)}>
+                      <CardItem style={styles.dialogCardCarNumber}>
+                        <Text style={{flex: 5}}>{item.day}</Text>
+                        <Icon
+                          style={{flex: 1}}
+                          name="arrow-right"
+                          size={30}
+                          color={colors.loginButton}
+                          type="evilicon"
+                        />
+                      </CardItem>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+                <TouchableOpacity onPress={() => this.changeClickedDate()}>
+                  <CardItem style={styles.dialogCardCarNumber}>
+                    <Text>Close</Text>
+                  </CardItem>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            <Modal isVisible={this.state.clickedBtnChange}>
+              <View style={styles.dialogConfirm}>
+                <View style={styles.viewContentConfirm}>
+                  <Text style={styles.textConfirm}>
+                    You choose change time open/close
+                  </Text>
+                  <Text style={styles.textConfirm}> or cancel that day?</Text>
+                </View>
+                <View style={styles.ViewConfirm}>
+                  <TouchableOpacity
+                    style={styles.confirmYesNo}
+                    onPress={() => this.changeClickedBtnChange()}>
+                    <Text style={styles.textConfirm}>Abort</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.confirmYesNo}
+                    onPress={() => this.changeTimeChange()}>
+                    <Text style={styles.textConfirm}>Time</Text>
+                    <Text style={styles.textConfirm}>Open/close</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.confirmYesNo}
+                    onPress={() => this.changeConfirm()}>
+                    <Text style={styles.textConfirm}>Cancel</Text>
+                    <Text style={styles.textConfirm}>Day</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          </CardItem>
+          {this.state.timeChange ? (
             <View>
-              <Text style={styles.textBooking}>BOOKING</Text>
+              <CardItem style={styles.cardBooking}>
+                <Text style={styles.bookingText}>OPEN AT:</Text>
+                <TouchableOpacity
+                  style={styles.pickerTime}
+                  onPress={() => {
+                    this.changeClickedTimeOpen();
+                  }}>
+                  <View style={styles.textTime}>
+                    <Text>{this.state.timeOpen}:00</Text>
+                  </View>
+                  <View style={styles.downIcon}>
+                    <Icon
+                      name="chevron-down"
+                      size={23}
+                      color="gray"
+                      type="evilicon"
+                    />
+                  </View>
+                </TouchableOpacity>
+                <Modal isVisible={this.state.clickedTimeOpen}>
+                  <View style={styles.dialogTime}>
+                    <CardItem style={styles.dialogCardCarNumber}>
+                      <Text style={{fontWeight: 'bold'}}>Time Open</Text>
+                    </CardItem>
+                    <ScrollView style={{height: 180, backgroundColor: 'white'}}>
+                      {timeOpen.map(item => (
+                        <TouchableOpacity
+                          onPress={async () => {
+                            await this.chooseTimeOpen(item.key);
+                            if (this.state.timeOpen !== 23) {
+                              this.setState({
+                                timeClose: this.state.timeOpen + 1,
+                              });
+                            } else {
+                              this.setState({timeClose: 0});
+                            }
+                          }}>
+                          <CardItem style={styles.dialogCardCarNumber}>
+                            <Text style={{flex: 5}}>{item.key}:00</Text>
+                            <Icon
+                              style={{flex: 1}}
+                              name="arrow-right"
+                              size={30}
+                              color={colors.loginButton}
+                              type="evilicon"
+                            />
+                          </CardItem>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                    <TouchableOpacity
+                      onPress={() => this.changeClickedTimeOpen()}>
+                      <CardItem style={styles.dialogCardCarNumber}>
+                        <Text>Close</Text>
+                      </CardItem>
+                    </TouchableOpacity>
+                  </View>
+                </Modal>
+                <Text style={styles.bookingText}>CLOSE AT:</Text>
+                <TouchableOpacity
+                  style={styles.pickerTime}
+                  onPress={() => {
+                    this.changeClickedTimeClose();
+                  }}>
+                  <View style={styles.textTime}>
+                    <Text>{this.state.timeClose}:00</Text>
+                  </View>
+                  <View style={styles.downIcon}>
+                    <Icon
+                      name="chevron-down"
+                      size={23}
+                      color="gray"
+                      type="evilicon"
+                    />
+                  </View>
+                </TouchableOpacity>
+                <Modal isVisible={this.state.clickedTimeClose}>
+                  <View style={styles.dialogTime}>
+                    <CardItem style={styles.dialogCardCarNumber}>
+                      <Text style={{fontWeight: 'bold'}}>Time Close</Text>
+                    </CardItem>
+                    <ScrollView style={{height: 180, backgroundColor: 'white'}}>
+                      {timeClose.map(item => (
+                        <TouchableOpacity
+                          onPress={async () => {
+                            await this.chooseTimeClose(item.key);
+                          }}>
+                          <CardItem style={styles.dialogCardCarNumber}>
+                            <Text style={{flex: 5}}>{item.key}:00</Text>
+                            <Icon
+                              style={{flex: 1}}
+                              name="arrow-right"
+                              size={30}
+                              color={colors.loginButton}
+                              type="evilicon"
+                            />
+                          </CardItem>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                    <TouchableOpacity
+                      onPress={() => this.changeClickedTimeClose()}>
+                      <CardItem style={styles.dialogCardCarNumber}>
+                        <Text>Close</Text>
+                      </CardItem>
+                    </TouchableOpacity>
+                  </View>
+                </Modal>
+              </CardItem>
+              <TouchableOpacity
+                style={styles.btnConfirm}
+                onPress={() => this.changeConfirm()}>
+                <View>
+                  <Text style={{color: 'white', fontWeight: 'bold'}}>
+                    Confirm
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          ) : null}
+          <Modal isVisible={this.state.clickedConfirm}>
+            <View style={styles.dialogConfirm}>
+              <View style={styles.viewContentConfirm}>
+                <Text style={styles.textConfirm}>Do you Confirm ?</Text>
+              </View>
+              <View style={styles.ViewConfirm}>
+                <TouchableOpacity
+                  style={styles.confirmYesNo}
+                  onPress={() => this.changeConfirm()}>
+                  <Text style={styles.textConfirm}>No</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.confirmYesNo}
+                  onPress={() => this.changeConfirm()}>
+                  <Text style={styles.textConfirm}>Yes</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
       </View>
     );

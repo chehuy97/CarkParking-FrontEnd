@@ -4,7 +4,7 @@ import dimens from '../../constants/Dimens';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    height: dimens.DEVICE_HEIGHT / 12,
     borderWidth: dimens.accountCard_boderWidth,
     borderColor: colors.colorPage,
     borderRadius: dimens.account_borderRadius,
@@ -18,7 +18,7 @@ export default StyleSheet.create({
     marginLeft: 10,
   },
   textInput: {
-    width: 270,
+    width: (dimens.DEVICE_WIDTH / 3) * 2,
   },
   radioButton: {
     marginLeft: 25,

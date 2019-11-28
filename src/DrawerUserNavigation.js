@@ -69,7 +69,7 @@ const Home_StackNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Booking',
+    initialRouteName: 'Home',
   },
 );
 

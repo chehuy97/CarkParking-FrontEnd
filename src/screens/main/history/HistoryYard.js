@@ -18,7 +18,7 @@ export default class History extends Component {
   }
   getHistories = async () => {
     var id = await AsyncStorage.getItem('accountId');
-    Axios.get('http://192.168.21.90:3000/api/customers//histories/' + id)
+    Axios.get('http://192.168.21.90:3000/api/owners/histories/' + id)
       .then(async res => {
         this.setState({histotiesData: res.data});
       })
@@ -51,17 +51,6 @@ export default class History extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        {/* <View style={styles.viewTitle}>
-          <View>
-            <Text style={styles.viewInfo}>Information</Text>
-          </View>
-          <View style={styles.viewTime}>
-            <Text>Time</Text>
-          </View>
-          <View style={styles.viewPrice}>
-            <Text>Price</Text>
-          </View>
-        </View> */}
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -74,8 +63,8 @@ export default class History extends Component {
           {this.state.histotiesData.map(data => (
             <View style={styles.container}>
               <View style={styles.viewCard}>
-                <Text style={styles.textBold}>{data.yard.account.name}</Text>
-                <Text style={styles.textNormal}>{data.yard.address}</Text>
+                <Text style={styles.textBold}>{data.account.name}</Text>
+                <Text style={styles.textNormal}>{data.car_number}</Text>
                 <Text style={styles.textNormal}>{data.day}</Text>
               </View>
               <View style={styles.viewTime}>
@@ -85,20 +74,6 @@ export default class History extends Component {
               <View style={styles.viewTime}>
                 <Text style={styles.textBold}>{data.price}</Text>
               </View>
-              {/* <TouchableOpacity style={styles.viewButton}>
-                <Image
-                  source={require('../../../assets/images/details.png')}
-                  style={styles.imageButton}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.viewButton}
-                onPress={() => this.deleteHistory(data.id)}>
-                <Image
-                  source={require('../../../assets/images/remove.png')}
-                  style={styles.imageButton}
-                />
-              </TouchableOpacity> */}
             </View>
           ))}
         </ScrollView>

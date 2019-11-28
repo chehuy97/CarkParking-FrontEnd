@@ -8,6 +8,7 @@ import Account from './screens/main/account/Account';
 import colors from './constants/Colors';
 import AccountEdit from './screens/main/account/AccountEdit';
 import AccountCar from './screens/main/account/AccountCar';
+import History from './screens/main/history/HistoryYard';
 
 class NavigationDrawerStructure extends Component {
   toggleDrawer = () => {
@@ -81,6 +82,20 @@ const Yard_StackNavigator = createStackNavigator({
   },
 });
 
+const History_StackNavigator = createStackNavigator({
+  History: {
+    screen: History,
+    navigationOptions: ({navigation}) => ({
+      title: 'History',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: colors.appColor,
+      },
+      headerTintColor: colors.colorTextWhite,
+    }),
+  },
+});
+
 const DrawerOwnerNavigation = createDrawerNavigator(
   {
     Account: {
@@ -93,6 +108,12 @@ const DrawerOwnerNavigation = createDrawerNavigator(
       screen: Yard_StackNavigator,
       navigationOptions: {
         drawerLabel: 'Yard',
+      },
+    },
+    History: {
+      screen: History_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'History',
       },
     },
   },

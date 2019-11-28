@@ -13,21 +13,11 @@ export default StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
-  viewBookedShedule: {
-    flex: 3,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    marginTop: 5,
-  },
   viewBookTime: {
-    flex: 3.5,
+    flex: 7.5,
     borderRadius: 5,
     marginVertical: 5,
     backgroundColor: colors.colorWhite,
-  },
-  viewButton: {
-    flex: 1,
-    flexDirection: 'row',
   },
   imageAddress: {
     width: dimens.DEVICE_WIDTH,
@@ -43,7 +33,7 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   pickerCarNumber: {
-    width: 250,
+    width: (dimens.DEVICE_WIDTH / 5) * 2.8,
     height: 34,
     marginLeft: 20,
     borderWidth: 1,
@@ -78,7 +68,7 @@ export default StyleSheet.create({
   pickerTime: {
     width: 60,
     height: 34,
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     borderWidth: 1,
     borderColor: colors.colorGray,
     flexDirection: 'row',
@@ -117,7 +107,7 @@ export default StyleSheet.create({
   },
   timeNumber: {
     width: 20,
-    height: 20,
+    height: 15,
     marginHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -131,5 +121,53 @@ export default StyleSheet.create({
     width: 40,
     height: 15,
     backgroundColor: '#ff1654',
+  },
+  dialogConfirm: {
+    backgroundColor: colors.colorWhite,
+    height: 180,
+    borderWidth: 1,
+    borderColor: colors.colorPage,
+  },
+  viewContentConfirm: {
+    height: 120,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.colorPage,
+  },
+  ViewConfirm: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  textConfirm: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.colorGray,
+  },
+  confirmYesNo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: colors.colorPage,
+    borderWidth: 1,
+  },
+  btnChange: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.loginButton,
+    width: dimens.DEVICE_WIDTH / 5,
+    borderRadius: 5,
+    height: 34,
+    marginLeft: 5,
+  },
+  btnConfirm: {
+    width: (dimens.DEVICE_WIDTH / 5) * 4,
+    height: 35,
+    backgroundColor: colors.loginButton,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginHorizontal: dimens.DEVICE_WIDTH / 10,
+    marginTop: 10,
   },
 });

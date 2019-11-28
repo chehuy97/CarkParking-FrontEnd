@@ -43,6 +43,7 @@ export default StyleSheet.create({
     width: dimens.DEVICE_WIDTH - dimens.home_parkingDetail_dimenstion * 2,
     backgroundColor: colors.colorWhite,
     borderRadius: dimens.home_parkingDetail_radius,
+    // borderWidth: 2,
   },
   detailName: {
     fontSize: dimens.textLogo,
@@ -105,22 +106,33 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  imageHistoryCard: {
-    width: 25,
-    height: 25,
+  viewAddressCard: {
+    flexDirection: 'row',
+    //backgroundColor: 'yellow',
+    borderBottomWidth: 0.8,
+    //borderBottomColor: colors.colorPage,
+    height: dimens.DEVICE_HEIGHT / 12,
+    marginVertical: 10,
   },
-  viewHistoryCardInfo: {
-    marginLeft: 20,
-    borderBottomWidth: 0.7,
-    borderBottomColor: colors.colorPage,
-    paddingVertical: 7,
-    width: 300,
+  imageAddressCard: {
+    width: 40,
+    height: 40,
   },
-  textNameHistoryCard: {
-    fontSize: dimens.textSize,
+  viewImageAddressCard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewAddressCardInfo: {
+    flex: 5,
+    justifyContent: 'center',
+  },
+  textNameAddressCard: {
+    fontSize: 18,
     marginBottom: 4,
   },
-  textAddressHistoryCard: {
+  textAddressAddressCard: {
     color: colors.colorGray,
+    fontSize: 16,
   },
 });

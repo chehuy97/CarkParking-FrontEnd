@@ -67,4 +67,35 @@ export default StyleSheet.create({
     marginLeft: 10,
   },
   //car
+  viewCarCard: {
+    height: dimens.DEVICE_HEIGHT / 5,
+    width: (dimens.DEVICE_WIDTH / 20) * 19,
+    marginLeft: dimens.DEVICE_WIDTH / 40,
+    marginVertical: 10,
+    borderRadius: 7,
+    backgroundColor: colors.colorWhite,
+  },
+  viewCarTitle: {
+    flex: 1,
+    backgroundColor: colors.loginButton,
+    justifyContent: 'center',
+    padding: dimens.DEVICE_WIDTH / 40,
+  },
+  viewTextContent: {
+    flexDirection: 'row',
+    marginTop: dimens.DEVICE_HEIGHT / 200,
+  },
+  textCarTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: colors.colorWhite,
+  },
+  textCarNameContent: {
+    fontSize: 17,
+    width: dimens.DEVICE_WIDTH / 6,
+    marginLeft: dimens.DEVICE_WIDTH / 30,
+  },
+  textCarValueContent: {
+    fontSize: 17,
+  },
 });

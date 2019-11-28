@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import {Input} from 'react-native-elements';
 import {Button} from 'react-native-elements';
+
 import dimens from '../../../constants/Dimens';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import styles from './Styles';
-import imageGreen from '../../../assets/images/parkingGreenSign.png';
-import imageRed from '../../../assets/images/parkingRedSign.png';
+import imageParking from '../../../assets/images/imageParking.png';
 import {CardItem} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../../constants/Colors';
@@ -28,6 +28,7 @@ export default class Home extends Component {
       longitude: 108.216629,
       error: null,
       resultSearch: 'default',
+      searchInfo: [],
       region: {
         longitude: 108.216629,
         latitude: 16.06887,
@@ -71,15 +72,7 @@ export default class Home extends Component {
         address: '',
         yardId: '',
       },
-      point: {
-        key: 0,
-        coordinate: {
-          longitude: 108.208523,
-          latitude: 16.074037,
-        },
-        name: 'Arthur',
-        address: 'Abc',
-      },
+
       cardStatus: false,
       searchStatus: false,
       lenghtOwner: 0,
@@ -115,8 +108,20 @@ export default class Home extends Component {
     );
     this.setState({dataOwners: res.data, lenghtOwner: res.data.length});
   };
+  searchAddress = async () => {
+    axios
+      .get(
+        'http://192.168.21.90:3000/api/customers/owneraddress/search/' +
+          this.state.resultSearch,
+      )
+      .then(async res => {
+        this.setState({searchInfo: res.data});
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
   render() {
-    var currentTime = new Date().getHours();
     return (
       <View style={styles.container}>
         <MapView
@@ -125,34 +130,30 @@ export default class Home extends Component {
           region={this.state.region}
           style={styles.map}>
           <Marker coordinate={this.state} />
-          {this.state.dataOwners.map(item => {
-            if (currentTime < item.yard.time_close) {
-              return (
-                <Marker
-                  coordinate={{
-                    longitude: item.yard.longitude,
+          {this.state.dataOwners.map(item => (
+            <Marker
+              coordinate={{
+                longitude: item.yard.longitude,
+                latitude: item.yard.latitude,
+              }}
+              title={item.name}
+              description={item.yard.address}
+              onPress={() => {
+                this.setState({
+                  ownersClick: {
+                    id: item.id,
                     latitude: item.yard.latitude,
-                  }}
-                  title={item.name}
-                  description={item.yard.address}
-                  onPress={() => {
-                    this.setState({
-                      ownersClick: {
-                        id: item.id,
-                        latitude: item.yard.latitude,
-                        longitude: item.yard.longitude,
-                        name: item.name,
-                        address: item.yard.address,
-                        yardId: item.yard.id,
-                      },
-                      cardStatus: true,
-                    });
-                    this.showViewTrue(item.yard.latitude, item.yard.longitude);
-                  }}
-                  image={imageGreen}></Marker>
-              );
-            }
-          })}
+                    longitude: item.yard.longitude,
+                    name: item.name,
+                    address: item.yard.address,
+                    yardId: item.yard.id,
+                  },
+                  cardStatus: true,
+                });
+                this.showViewTrue(item.yard.latitude, item.yard.longitude);
+              }}
+              image={imageParking}></Marker>
+          ))}
         </MapView>
         {this.state.cardStatus ? (
           <View>
@@ -253,92 +254,39 @@ export default class Home extends Component {
         {this.state.searchStatus ? (
           <View style={styles.searchView}>
             <View style={styles.viewHistory}>
-              <Text style={styles.historyLasttimeText}>Last time</Text>
+              <Text style={styles.historyLasttimeText}>Result</Text>
               <ScrollView>
-                <View>
-                  <CardItem>
-                    <View style={styles.viewImageHistoryCard}>
+                {this.state.searchInfo.map(item => (
+                  <View style={styles.viewAddressCard}>
+                    <View style={styles.viewImageAddressCard}>
                       <Image
-                        style={styles.imageHistoryCard}
-                        source={require('../../../assets/images/clock.png')}
+                        style={styles.imageAddressCard}
+                        source={require('../../../assets/images/imageParking.png')}
                       />
                     </View>
-                    <View style={styles.viewHistoryCardInfo}>
+                    <View style={styles.viewAddressCardInfo}>
                       <TouchableOpacity
                         onPress={() => {
                           this.setState({
                             region: {
-                              longitude: this.state.point.coordinate.longitude,
-                              latitude: this.state.point.coordinate.latitude,
+                              longitude: item.yard.longitude,
+                              latitude: item.yard.latitude,
                               longitudeDelta: dimens.delta,
                               latitudeDelta: dimens.delta,
                             },
                             searchStatus: false,
-                            cardStatus: false,
                           });
                         }}>
-                        <Text style={styles.textNameHistoryCard}>Arthur</Text>
+                        <Text style={styles.textNameAddressCard}>
+                          {item.yard.address}
+                        </Text>
                       </TouchableOpacity>
-                      <Text style={styles.textAddressHistoryCard}>
-                        112/59 Tran Cao Van
+                      <Text style={styles.textAddressAddressCard}>
+                        {item.name}
                       </Text>
                     </View>
-                  </CardItem>
-                </View>
-                <View>
-                  <CardItem>
-                    <View style={styles.viewImageHistoryCard}>
-                      <Image
-                        style={styles.imageHistoryCard}
-                        source={require('../../../assets/images/clock.png')}
-                      />
-                    </View>
-                    <View style={styles.viewHistoryCardInfo}>
-                      <TouchableOpacity>
-                        <Text style={styles.textNameHistoryCard}>Ben</Text>
-                      </TouchableOpacity>
-                      <Text style={styles.textAddressHistoryCard}>
-                        23 Ly Dao Thanh
-                      </Text>
-                    </View>
-                  </CardItem>
-                </View>
-                <View>
-                  <CardItem>
-                    <View style={styles.viewImageHistoryCard}>
-                      <Image
-                        style={styles.imageHistoryCard}
-                        source={require('../../../assets/images/clock.png')}
-                      />
-                    </View>
-                    <View style={styles.viewHistoryCardInfo}>
-                      <TouchableOpacity>
-                        <Text style={styles.textNameHistoryCard}>Shawn</Text>
-                      </TouchableOpacity>
-                      <Text style={styles.textAddressHistoryCard}>
-                        193 Nguyen Luong Bang
-                      </Text>
-                    </View>
-                  </CardItem>
-                </View>
-                <View>
-                  <CardItem>
-                    <View style={styles.viewImageHistoryCard}>
-                      <Image
-                        style={styles.imageHistoryCard}
-                        source={require('../../../assets/images/clock.png')}
-                      />
-                    </View>
-                    <View style={styles.viewHistoryCardInfo}>
-                      <TouchableOpacity>
-                        <Text style={styles.textNameHistoryCard}>Dung</Text>
-                      </TouchableOpacity>
-                      <Text style={styles.textAddressHistoryCard}>
-                        67 Pham Hung
-                      </Text>
-                    </View>
-                  </CardItem>
-                </View>
+                  </View>
+                ))}
               </ScrollView>
             </View>
           </View>
@@ -351,37 +299,19 @@ export default class Home extends Component {
           onFocus={() => {
             this.setState({searchStatus: true});
           }}
-          onSubmitEditing={() => {
-            if (this.state.resultSearch === this.state.point.address) {
-              this.setState({
-                region: {
-                  longitude: this.state.point.coordinate.longitude,
-                  latitude: this.state.point.coordinate.latitude,
-                  longitudeDelta: dimens.delta,
-                  latitudeDelta: dimens.delta,
-                },
-                cardStatus: false,
-              });
-            } else {
-              this.setState({
-                region: {
-                  longitude: 108.216629,
-                  latitude: 16.06887,
-                  longitudeDelta: 0.03,
-                  latitudeDelta: 0.03,
-                },
-                cardStatus: false,
-              });
-            }
-            this.setState({searchStatus: false});
-          }}
+          onSubmitEditing={() => this.searchAddress()}
           leftIcon={
-            <Icon
-              name="car"
-              size={18}
-              color={Colors.appColor}
-              style={{marginRight: 10}}
-            />
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({searchStatus: false});
+              }}>
+              <Icon
+                name="chevron-left"
+                size={18}
+                color={Colors.appColor}
+                style={{marginRight: 10}}
+              />
+            </TouchableOpacity>
           }
           rightIcon={
             <Icon

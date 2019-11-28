@@ -26,6 +26,8 @@ export default class Login extends Component {
       this.props.navigation.navigate('DrawerOnwer');
     } else if (roleId === 3) {
       this.props.navigation.navigate('DrawerUser');
+    } else {
+      alert('You type wrong name or password');
     }
   }
 
