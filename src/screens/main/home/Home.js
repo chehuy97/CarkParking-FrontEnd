@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Input} from 'react-native-elements';
 import {Button} from 'react-native-elements';
-
+import MapViewDirections from 'react-native-maps-directions';
 import dimens from '../../../constants/Dimens';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
@@ -20,12 +20,20 @@ import {CardItem} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../../constants/Colors';
 import axios from 'axios';
+import Modal from 'react-native-modal';
+
+const GOOGLE_MAPS_APIKEY = 'AIzaSyD6mOq5rTWHZoVXRcN1csfDJyZNGSHTW04';
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: 16.06887,
-      longitude: 108.216629,
+      latitude: 16.053344,
+      longitude: 108.217691,
+      fakeCurrentPosition: {
+        latitude: 16.053344,
+        longitude: 108.217691,
+      },
       error: null,
       resultSearch: 'default',
       searchInfo: [],
@@ -35,47 +43,23 @@ export default class Home extends Component {
         longitudeDelta: 0.03,
         latitudeDelta: 0.03,
       },
-      dataOwners: [
-        {
-          id: 0,
-          username: '',
-          password: '',
-          status: true,
-          name: '',
-          birthday: '0000-00-00',
-          gender: 'Male',
-          phone: '',
-          image: 'gdausd4r234hkdfdff',
-          balance: 0,
-          roles: [
-            {
-              id: 2,
-              role_name: '',
-            },
-          ],
-          yard: {
-            id: 0,
-            status: true,
-            address: '',
-            latitude: 0,
-            longitude: 0,
-            time_open: 0,
-            time_close: 0,
-          },
-        },
-      ],
+      dataOwners: [],
       ownersClick: {
-        id: '',
-        latitude: '',
-        longitude: '',
+        id: 0,
+        coordinate: {
+          latitude: 16.074309,
+          longitude: 108.21422,
+        },
         name: '',
         address: '',
-        yardId: '',
+        yardId: 0,
       },
-
       cardStatus: false,
       searchStatus: false,
       lenghtOwner: 0,
+      statusDirection: false,
+      nearestAddress: {},
+      clickShowNearestAddress: false,
     };
   }
   componentDidMount = async () => {
@@ -91,6 +75,29 @@ export default class Home extends Component {
   };
   changeStatus = () => {
     this.setState({cardStatus: false});
+  };
+  changeStatusDirection = () => {
+    this.setState({
+      statusDirection: true,
+      cardStatus: false,
+      region: {
+        longitude: 108.216629,
+        latitude: 16.06887,
+        longitudeDelta: 0.03,
+        latitudeDelta: 0.03,
+      },
+    });
+  };
+  showDirection = coordinate => {
+    return (
+      <MapViewDirections
+        origin={this.state.fakeCurrentPosition}
+        destination={coordinate}
+        apikey={GOOGLE_MAPS_APIKEY}
+        strokeWidth={5}
+        strokeColor="#708090"
+      />
+    );
   };
   showViewTrue = (latitude, longitude) => {
     this.setState({
@@ -121,6 +128,48 @@ export default class Home extends Component {
         console.log(error);
       });
   };
+  findNearestAddress = async () => {
+    var res = await axios.get(
+      'http://192.168.21.90:3000/api/customers/owneraddress/nearest/' +
+        this.state.fakeCurrentPosition.latitude +
+        '/' +
+        this.state.fakeCurrentPosition.longitude,
+    );
+    this.setState({
+      region: {
+        latitude: res.data.yard.latitude,
+        longitude: res.data.yard.longitude,
+        latitudeDelta: dimens.delta,
+        longitudeDelta: dimens.delta,
+      },
+      clickShowNearestAddress: false,
+      cardStatus: true,
+      statusDirection: false,
+      ownersClick: {
+        id: res.data.id,
+        coordinate: {
+          latitude: res.data.yard.latitude,
+          longitude: res.data.yard.longitude,
+        },
+        name: res.data.name,
+        address: res.data.yard.address,
+        yardId: res.data.yard.id,
+      },
+    });
+    console.log(this.state.nearestAddress);
+  };
+  changeClickShowNearestAddress = () => {
+    this.setState({
+      clickShowNearestAddress: !this.state.clickShowNearestAddress,
+      cardStatus: false,
+      region: {
+        longitude: 108.216629,
+        latitude: 16.06887,
+        longitudeDelta: 0.03,
+        latitudeDelta: 0.03,
+      },
+    });
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -129,7 +178,7 @@ export default class Home extends Component {
           zoomEnabled={true}
           region={this.state.region}
           style={styles.map}>
-          <Marker coordinate={this.state} />
+          <Marker coordinate={this.state.fakeCurrentPosition} />
           {this.state.dataOwners.map(item => (
             <Marker
               coordinate={{
@@ -142,18 +191,24 @@ export default class Home extends Component {
                 this.setState({
                   ownersClick: {
                     id: item.id,
-                    latitude: item.yard.latitude,
-                    longitude: item.yard.longitude,
+                    coordinate: {
+                      latitude: item.yard.latitude,
+                      longitude: item.yard.longitude,
+                    },
                     name: item.name,
                     address: item.yard.address,
                     yardId: item.yard.id,
                   },
                   cardStatus: true,
+                  statusDirection: false,
                 });
                 this.showViewTrue(item.yard.latitude, item.yard.longitude);
               }}
               image={imageParking}></Marker>
           ))}
+          {this.state.statusDirection
+            ? this.showDirection(this.state.ownersClick.coordinate)
+            : null}
         </MapView>
         {this.state.cardStatus ? (
           <View>
@@ -177,9 +232,7 @@ export default class Home extends Component {
                 <Button
                   title="Direct"
                   buttonStyle={styles.detailButton}
-                  onPress={() => {
-                    this.props.navigation.navigate('Search');
-                  }}
+                  onPress={() => this.changeStatusDirection()}
                 />
                 <Button
                   title="Booking"
@@ -212,7 +265,7 @@ export default class Home extends Component {
             <TouchableOpacity
               style={styles.buttonGoCard}
               onPress={() => {
-                this.props.navigation.navigate('Search');
+                this.changeClickShowNearestAddress();
               }}>
               <Image
                 style={styles.buttonImage}
@@ -241,9 +294,7 @@ export default class Home extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonGo}
-              onPress={() => {
-                this.props.navigation.navigate('Search');
-              }}>
+              onPress={() => this.changeClickShowNearestAddress()}>
               <Image
                 style={styles.buttonImage}
                 source={require('../../../assets/images/arrows.png')}
@@ -251,6 +302,27 @@ export default class Home extends Component {
             </TouchableOpacity>
           </View>
         )}
+        <Modal isVisible={this.state.clickShowNearestAddress}>
+          <View style={styles.dialogConfirm}>
+            <View style={styles.viewContentConfirm}>
+              <Text style={styles.textConfirm}>
+                do you want to find a nearest address ?
+              </Text>
+            </View>
+            <View style={styles.ViewConfirm}>
+              <TouchableOpacity
+                style={styles.confirmYesNo}
+                onPress={() => this.changeClickShowNearestAddress()}>
+                <Text style={styles.textConfirm}>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.confirmYesNo}
+                onPress={() => this.findNearestAddress()}>
+                <Text style={styles.textConfirm}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         {this.state.searchStatus ? (
           <View style={styles.searchView}>
             <View style={styles.viewHistory}>

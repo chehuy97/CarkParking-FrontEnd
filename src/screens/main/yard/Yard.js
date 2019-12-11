@@ -27,11 +27,12 @@ export default class Yard extends Component {
       clickedTimeClose: false,
       clickedBtnChange: false,
       clickedConfirm: false,
-      timeChange: true,
+      timeChange: false,
       statusYard: true,
       timeOpen: 0,
       timeClose: 0,
-      dateChoose: 'Chế Đẹp Trai',
+      dateChoose: 'default',
+      func: 0,
     };
   }
   changeClickedDate = () => {
@@ -75,7 +76,7 @@ export default class Yard extends Component {
   changeTimeChange = () => {
     this.setState({
       statusYard: true,
-      timeChange: !this.state.timeChange,
+      timeChange: true,
       clickedBtnChange: !this.state.clickedBtnChange,
     });
   };
@@ -116,6 +117,40 @@ export default class Yard extends Component {
       .catch(error => {
         console.log(error);
       });
+  };
+  postChangeTimeOpenClose = async () => {
+    this.setState({
+      clickedConfirm: !this.state.clickedConfirm,
+      clickedBtnChange: !this.state.clickedBtnChange,
+    });
+    var time_open = 0;
+    var time_close = 0;
+    if (this.state.func === 1) {
+      time_open = this.state.timeOpen;
+      time_close = this.state.timeClose;
+    }
+    const res = await Axios.post(
+      'http://192.168.21.90:3000/api/owners/changeschedules',
+      {
+        day: this.state.dateChoose,
+        time_open: time_open,
+        time_close: time_close,
+        status: this.state.statusYard,
+        yardId: this.state.yardData.id,
+      },
+    );
+    alert('You update successfully');
+  };
+  comfirmChange = () => {
+    if (this.state.func === 1) {
+      this.setState({clickedConfirm: !this.state.clickedConfirm});
+      this.postChangeTimeOpenClose();
+      alert('You update successfully');
+    } else if (this.state.func === 2) {
+      alert('hoho');
+    } else {
+      alert('cc');
+    }
   };
   componentDidMount = async () => {
     await this.getDataYard();
@@ -238,7 +273,10 @@ export default class Yard extends Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.confirmYesNo}
-                    onPress={() => this.changeConfirm()}>
+                    onPress={() => {
+                      this.setState({func: 2});
+                      this.changeConfirm();
+                    }}>
                     <Text style={styles.textConfirm}>Cancel</Text>
                     <Text style={styles.textConfirm}>Day</Text>
                   </TouchableOpacity>
@@ -359,7 +397,10 @@ export default class Yard extends Component {
               </CardItem>
               <TouchableOpacity
                 style={styles.btnConfirm}
-                onPress={() => this.changeConfirm()}>
+                onPress={() => {
+                  this.setState({func: 1});
+                  this.changeConfirm();
+                }}>
                 <View>
                   <Text style={{color: 'white', fontWeight: 'bold'}}>
                     Confirm
@@ -381,7 +422,7 @@ export default class Yard extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.confirmYesNo}
-                  onPress={() => this.changeConfirm()}>
+                  onPress={() => this.postChangeTimeOpenClose()}>
                   <Text style={styles.textConfirm}>Yes</Text>
                 </TouchableOpacity>
               </View>

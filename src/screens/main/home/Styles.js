@@ -135,4 +135,33 @@ export default StyleSheet.create({
     color: colors.colorGray,
     fontSize: 16,
   },
+  dialogConfirm: {
+    backgroundColor: colors.colorWhite,
+    height: 160,
+    borderWidth: 1,
+    borderColor: colors.colorPage,
+  },
+  viewContentConfirm: {
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.colorPage,
+  },
+  ViewConfirm: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  textConfirm: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.colorGray,
+  },
+  confirmYesNo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: colors.colorPage,
+    borderWidth: 1,
+  },
 });

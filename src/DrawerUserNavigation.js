@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
 import Home from './screens/main/home/Home';
-import Search from './screens/main/search/Search';
 //import Home_StackNavigator from './screens/main/home/Home_Navigator'
 import History from './screens/main/history/History';
 import Payment from './screens/main/payment/Payment';
@@ -49,17 +48,6 @@ const Home_StackNavigator = createStackNavigator(
       screen: Booking,
       navigationOptions: ({navigation}) => ({
         title: 'Booking',
-        headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-        headerStyle: {
-          backgroundColor: colors.appColor,
-        },
-        headerTintColor: colors.colorTextWhite,
-      }),
-    },
-    Search: {
-      screen: Search,
-      navigationOptions: ({navigation}) => ({
-        title: 'Search',
         headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
         headerStyle: {
           backgroundColor: colors.appColor,

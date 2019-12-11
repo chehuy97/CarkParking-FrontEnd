@@ -8,14 +8,20 @@ import {
   AsyncStorage,
   RefreshControl,
 } from 'react-native';
+import {Input} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native';
-//import HistoryCard from '../../../components/history_card/HistoryCard';
+import Modal from 'react-native-modal';
 import Axios from 'axios';
 export default class History extends Component {
   constructor(props) {
     super(props);
-    this.state = {histotiesData: [], refreshing: false};
+    this.state = {histotiesData: [], refreshing: false, clickReport: false};
   }
+
+  changeClickReport = () => {
+    this.setState({clickReport: !this.state.clickReport});
+  };
+
   getHistories = async () => {
     var id = await AsyncStorage.getItem('accountId');
     Axios.get('http://192.168.21.90:3000/api/customers//histories/' + id)
@@ -77,6 +83,7 @@ export default class History extends Component {
                 <Text style={styles.textBold}>{data.yard.account.name}</Text>
                 <Text style={styles.textNormal}>{data.yard.address}</Text>
                 <Text style={styles.textNormal}>{data.day}</Text>
+                <Text style={styles.textNormal}>position: {data.slot}</Text>
               </View>
               <View style={styles.viewTime}>
                 <Text style={styles.textBold}>{data.time_come}:00</Text>
@@ -85,13 +92,17 @@ export default class History extends Component {
               <View style={styles.viewTime}>
                 <Text style={styles.textBold}>{data.price}</Text>
               </View>
-              {/* <TouchableOpacity style={styles.viewButton}>
+              <TouchableOpacity
+                style={styles.viewButton}
+                onPress={() => {
+                  this.changeClickReport();
+                }}>
                 <Image
-                  source={require('../../../assets/images/details.png')}
+                  source={require('../../../assets/images/newspaper.png')}
                   style={styles.imageButton}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.viewButton}
                 onPress={() => this.deleteHistory(data.id)}>
                 <Image
@@ -102,6 +113,26 @@ export default class History extends Component {
             </View>
           ))}
         </ScrollView>
+        <Modal isVisible={this.state.clickReport}>
+          <View style={styles.dialogConfirm}>
+            <View style={styles.viewContentConfirm}>
+              <Text style={styles.textConfirm}>
+                write the car number you want to report:
+              </Text>
+              <Input placeholder="car number" />
+            </View>
+            <View style={styles.ViewConfirm}>
+              <TouchableOpacity
+                style={styles.confirmYesNo}
+                onPress={() => this.changeClickReport()}>
+                <Text style={styles.textConfirm}>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.confirmYesNo}>
+                <Text style={styles.textConfirm}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }

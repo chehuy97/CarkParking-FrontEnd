@@ -40,6 +40,10 @@ export default class Booking extends Component {
       dateShow: [],
     };
   }
+  // _onRefresh = () => {
+  //   this.setState({refreshing: true});
+  //   this.getAddressOwner().then(() => this.setState({refreshing: false}));
+  // };
   changeClickedBooking = () => {
     this.setState({
       clickedBooking: !this.state.clickedBooking,
@@ -150,24 +154,22 @@ export default class Booking extends Component {
       await this.changeClickedBooking();
       await alert('You must choose time come and leave');
     } else {
-      await Axios.post('http://192.168.21.90:3000/api/customers/booking/', {
-        day: this.state.date,
-        time_come: this.state.timeCome,
-        time_leave: this.state.timeLeave,
-        price:
-          (this.state.timeLeave - this.state.timeCome) *
-          this.state.addressData.price,
-        car_number: this.state.carNumber,
-        accountId: this.state.accountId,
-        yardId: this.state.yardId,
-      })
-        .then(function(res) {
-          // console.log(res);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      const res = await Axios.post(
+        'http://192.168.21.90:3000/api/customers/address/booking/',
+        {
+          day: this.state.date,
+          time_come: this.state.timeCome,
+          time_leave: this.state.timeLeave,
+          price:
+            (this.state.timeLeave - this.state.timeCome) *
+            this.state.addressData.price,
+          car_number: this.state.carNumber,
+          accountId: this.state.accountId,
+          yardId: this.state.yardId,
+        },
+      );
       await this.changeClickedBooking();
+      alert('Sucessfully!Your position in this yard is' + res.data);
       await this.props.navigation.navigate('Home');
     }
   };
@@ -557,15 +559,14 @@ export default class Booking extends Component {
           <Modal isVisible={this.state.clickedBooking}>
             <View style={styles.dialogConfirm}>
               <View style={styles.viewContentConfirm}>
-                <Text style={styles.textConfirm}>
-                  do you want to book period
-                </Text>
+                <Text style={styles.textConfirm}>do you want to book</Text>
                 <Text style={styles.textConfirm}>
                   from{' '}
                   {this.state.timeCome +
                     ':00 to ' +
                     this.state.timeLeave +
                     ':00'}
+                  ?
                 </Text>
               </View>
               <View style={styles.ViewConfirm}>

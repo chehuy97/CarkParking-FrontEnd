@@ -51,12 +51,12 @@ export default StyleSheet.create({
   viewButton: {
     flex: 1.2,
     marginLeft: 5,
-    borderRadius: 10,
+    //borderRadius: 10,
   },
   imageButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 28,
+    height: 28,
+    //borderRadius: 15,
   },
   // viewInfo: {flex: 3},
   // viewTime: {flex: 1},
@@ -65,4 +65,37 @@ export default StyleSheet.create({
   //   fontSize: 18,
   //   fontWeight: 'bold',
   // },
+  dialogConfirm: {
+    backgroundColor: colors.colorWhite,
+    height: 160,
+    borderWidth: 1,
+    borderColor: colors.colorPage,
+  },
+  viewContentConfirm: {
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.colorPage,
+  },
+  ViewConfirm: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  textConfirm: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.colorGray,
+  },
+  confirmYesNo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: colors.colorPage,
+    borderWidth: 1,
+  },
+  textInput: {
+    width: 140,
+    marginLeft: 10,
+  },
 });
