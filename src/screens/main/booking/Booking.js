@@ -169,7 +169,7 @@ export default class Booking extends Component {
         },
       );
       await this.changeClickedBooking();
-      alert('Sucessfully!Your position in this yard is' + res.data);
+      alert('Sucessfully!Your position in this yard is ' + res.data);
       await this.props.navigation.navigate('Home');
     }
   };
@@ -193,6 +193,50 @@ export default class Booking extends Component {
   //     }
   //   }
   // };
+  dateFormat = month => {
+    var monthFormat = '';
+    switch (month) {
+      case 1:
+        monthFormat = 'Jan';
+        break;
+      case 2:
+        monthFormat = 'Feb';
+        break;
+      case 3:
+        monthFormat = 'Mar';
+        break;
+      case 4:
+        monthFormat = 'Apl';
+        break;
+      case 5:
+        monthFormat = 'May';
+        break;
+      case 6:
+        monthFormat = 'Jun';
+        break;
+      case 7:
+        monthFormat = 'Jul';
+        break;
+      case 8:
+        monthFormat = 'Aus';
+        break;
+      case 9:
+        monthFormat = 'Sep';
+        break;
+      case 10:
+        monthFormat = 'Oct';
+        break;
+      case 11:
+        monthFormat = 'Nov';
+        break;
+      case 12:
+        monthFormat = 'Dec';
+        break;
+      default:
+        monthFormat = 'wrong';
+    }
+    return monthFormat;
+  };
   setDay = async () => {
     var date = await new Date();
     this.setState({
@@ -203,7 +247,8 @@ export default class Booking extends Component {
       date.setDate(new Date().getDate() + i);
       var day =
         date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-      var dayShow = date.getDate() + '-' + (date.getMonth() + 1);
+
+      var dayShow = date.getDate() + '-' + this.dateFormat(date.getMonth() + 1);
       //this.state.date.push({day: day});
       this.state.dateShow.push({day: dayShow});
       await this.getAddressOwner(day);
@@ -559,7 +604,7 @@ export default class Booking extends Component {
           <Modal isVisible={this.state.clickedBooking}>
             <View style={styles.dialogConfirm}>
               <View style={styles.viewContentConfirm}>
-                <Text style={styles.textConfirm}>do you want to book</Text>
+                <Text style={styles.textConfirm}>Do you want to book</Text>
                 <Text style={styles.textConfirm}>
                   from{' '}
                   {this.state.timeCome +

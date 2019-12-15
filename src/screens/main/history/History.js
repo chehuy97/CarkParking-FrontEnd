@@ -15,7 +15,13 @@ import Axios from 'axios';
 export default class History extends Component {
   constructor(props) {
     super(props);
-    this.state = {histotiesData: [], refreshing: false, clickReport: false};
+    this.state = {
+      histotiesData: [],
+      refreshing: false,
+      clickReport: false,
+      carNumber: '',
+      transactionId: 0,
+    };
   }
 
   changeClickReport = () => {
@@ -44,6 +50,19 @@ export default class History extends Component {
         '/' +
         id,
     )
+      .then(async res => {
+        this._onRefresh();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  send_report = async () => {
+    this.changeClickReport();
+    Axios.post('http://192.168.21.90:3000/api/customers/histories/reports', {
+      car_number: this.state.carNumber,
+      transactionId: this.state.transactionId,
+    })
       .then(async res => {
         this._onRefresh();
       })
@@ -95,6 +114,7 @@ export default class History extends Component {
               <TouchableOpacity
                 style={styles.viewButton}
                 onPress={() => {
+                  this.setState({transactionId: data.id});
                   this.changeClickReport();
                 }}>
                 <Image
@@ -117,9 +137,12 @@ export default class History extends Component {
           <View style={styles.dialogConfirm}>
             <View style={styles.viewContentConfirm}>
               <Text style={styles.textConfirm}>
-                write the car number you want to report:
+                Write the car number you want to report:
               </Text>
-              <Input placeholder="car number" />
+              <Input
+                placeholder="car number"
+                onChangeText={value => this.setState({carNumber: value})}
+              />
             </View>
             <View style={styles.ViewConfirm}>
               <TouchableOpacity
@@ -127,7 +150,9 @@ export default class History extends Component {
                 onPress={() => this.changeClickReport()}>
                 <Text style={styles.textConfirm}>No</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmYesNo}>
+              <TouchableOpacity
+                style={styles.confirmYesNo}
+                onPress={() => this.send_report()}>
                 <Text style={styles.textConfirm}>Yes</Text>
               </TouchableOpacity>
             </View>

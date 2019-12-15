@@ -6,11 +6,13 @@ import {CardItem, Text} from 'native-base';
 import {Image, Button} from 'react-native-elements';
 import Axios from 'axios';
 import Styles from '../../../components/account_card/Styles';
+import Modal from 'react-native-modal';
 
 export default class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      clickedLogout: false,
       dataId: '',
       roleId: 0,
       account: {
@@ -34,6 +36,9 @@ export default class Account extends Component {
       },
     };
   }
+  changeClickedLogout = () => {
+    this.setState({clickedLogout: !this.state.clickedLogout});
+  };
   getAccount = async () => {
     var id = await AsyncStorage.getItem('accountId');
     Axios.get('http://192.168.21.90:3000/api/accounts/' + id)
@@ -97,9 +102,7 @@ export default class Account extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              this.props.navigation.navigate('Login');
-            }}>
+            onPress={() => this.changeClickedLogout()}>
             <View style={styles.viewButtonText}>
               <Text style={{color: 'white', fontWeight: 'bold', marginTop: 10}}>
                 Logout
@@ -107,6 +110,27 @@ export default class Account extends Component {
             </View>
           </TouchableOpacity>
         </View>
+        <Modal isVisible={this.state.clickedLogout}>
+          <View style={styles.dialogConfirm}>
+            <View style={styles.viewContentConfirm}>
+              <Text style={styles.textConfirm}>You want to Log out?</Text>
+            </View>
+            <View style={styles.ViewConfirm}>
+              <TouchableOpacity
+                style={styles.confirmYesNo}
+                onPress={() => this.changeClickedLogout()}>
+                <Text style={styles.textConfirm}>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.confirmYesNo}
+                onPress={() => {
+                  this.props.navigation.navigate('Login');
+                }}>
+                <Text style={styles.textConfirm}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
