@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   AsyncStorage,
+  Alert,
 } from 'react-native';
 import YardInfoCard from '../../../components/booking_card/YardInfoCard';
 import styles from './Styles';
@@ -27,6 +28,7 @@ export default class Booking extends Component {
       clickedTimeLeave: false,
       clickedBooking: false,
       clickedDate: false,
+      successfulBooking: false,
       addressData: {time_open: 0, time_close: 0},
       AccountCars: {},
       lengthCar: 0,
@@ -40,10 +42,9 @@ export default class Booking extends Component {
       dateShow: [],
     };
   }
-  // _onRefresh = () => {
-  //   this.setState({refreshing: true});
-  //   this.getAddressOwner().then(() => this.setState({refreshing: false}));
-  // };
+  changeSuccessfulBooking = () => {
+    this.setState({successfulBooking: !this.state.successfulBooking});
+  };
   changeClickedBooking = () => {
     this.setState({
       clickedBooking: !this.state.clickedBooking,
@@ -149,6 +150,28 @@ export default class Booking extends Component {
   //     this.setState({timeStart: currentTime});
   //   }
   // };
+  showSuccessfulBooking = slot => {
+    this.changeSuccessfulBooking();
+    return (
+      <Modal isVisible={this.state.successfulBooking}>
+        <View style={styles.dialogConfirm}>
+          <View style={styles.viewContentConfirm}>
+            <Text style={styles.textConfirm}>Sucessfully</Text>
+            <Text style={styles.textConfirm}>
+              Your position in this yard is: {slot}
+            </Text>
+          </View>
+          <View style={styles.ViewConfirm}>
+            <TouchableOpacity
+              style={styles.confirmYesNo}
+              onPress={() => this.changeSuccessfulBooking()}>
+              <Text style={styles.textConfirm}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
   bookShedule = async () => {
     if (this.state.timeCome === this.state.timeLeave) {
       await this.changeClickedBooking();
@@ -169,7 +192,12 @@ export default class Booking extends Component {
         },
       );
       await this.changeClickedBooking();
-      alert('Sucessfully!Your position in this yard is ' + res.data);
+      Alert.alert(
+        'Successfully',
+        'Your Position is: ' + res.data,
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        {cancelable: false},
+      );
       await this.props.navigation.navigate('Home');
     }
   };
@@ -596,12 +624,30 @@ export default class Booking extends Component {
           </View>
           <TouchableOpacity
             style={styles.viewBtnBooking}
-            onPress={() => this.changeClickedBooking()}>
+            onPress={() =>
+              Alert.alert(
+                'Booking',
+                'Do you want to book from ' +
+                  this.state.timeCome +
+                  ':00 to ' +
+                  this.state.timeLeave +
+                  ':00 ?',
+                [
+                  {
+                    text: 'No',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {text: 'Yes', onPress: () => this.bookShedule()},
+                ],
+                {cancelable: false},
+              )
+            }>
             <View>
               <Text style={styles.textBooking}>BOOKING</Text>
             </View>
           </TouchableOpacity>
-          <Modal isVisible={this.state.clickedBooking}>
+          {/* <Modal isVisible={this.state.clickedBooking}>
             <View style={styles.dialogConfirm}>
               <View style={styles.viewContentConfirm}>
                 <Text style={styles.textConfirm}>Do you want to book</Text>
@@ -627,7 +673,7 @@ export default class Booking extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </Modal>
+          </Modal> */}
         </View>
       </View>
     );
