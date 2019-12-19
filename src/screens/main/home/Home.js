@@ -122,7 +122,10 @@ export default class Home extends Component {
           this.state.resultSearch,
       )
       .then(async res => {
-        this.setState({searchInfo: res.data});
+        this.setState({
+          searchInfo: res.data,
+          cardStatus: !this.state.cardStatus,
+        });
       })
       .catch(error => {
         console.log(error);

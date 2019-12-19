@@ -113,7 +113,7 @@ export default class Account extends Component {
         <Modal isVisible={this.state.clickedLogout}>
           <View style={styles.dialogConfirm}>
             <View style={styles.viewContentConfirm}>
-              <Text style={styles.textConfirm}>You want to Log out?</Text>
+              <Text style={styles.textConfirm}>You want to log out?</Text>
             </View>
             <View style={styles.ViewConfirm}>
               <TouchableOpacity

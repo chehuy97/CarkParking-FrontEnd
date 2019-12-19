@@ -7,6 +7,7 @@ import {
   Text,
   AsyncStorage,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import {Input} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native';
@@ -59,16 +60,20 @@ export default class History extends Component {
   };
   send_report = async () => {
     this.changeClickReport();
-    Axios.post('http://192.168.21.90:3000/api/customers/histories/reports', {
-      car_number: this.state.carNumber,
-      transactionId: this.state.transactionId,
-    })
-      .then(async res => {
-        this._onRefresh();
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    var res = await Axios.post(
+      'http://192.168.21.90:3000/api/customers/histories/reports',
+      {
+        car_number: this.state.carNumber,
+        transactionId: this.state.transactionId,
+      },
+    );
+    Alert.alert('Report Successfully');
+    // Alert.alert(
+    //   'Report Successfully',
+    //   [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+    //   {cancelable: false},
+    // );
+    //alert('reort succefully');
   };
   componentDidMount = () => {
     this.getHistories();
